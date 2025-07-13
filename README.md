@@ -6,7 +6,8 @@
 
 ## 🚀 Features
 
-- ✅ Add, Update, delete users
+- ✅ Add, Update, Delete users
+- ✅ Login with user creds and get token
 - More on the way....
 
 ---
