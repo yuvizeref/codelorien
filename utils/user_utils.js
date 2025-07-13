@@ -70,7 +70,7 @@ const update_password = async (id, old_password, new_password) => {
   }
 
   const user = await User.findById(id);
-  if (!user) {
+  if (!user || user.deleted) {
     throw new Error("User not found");
   }
 

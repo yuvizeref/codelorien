@@ -2,6 +2,7 @@ import express from "express";
 import db_connection from "./database/mongodb.js";
 import dotenv from "dotenv";
 import user_router from "./routes/user_routes.js";
+import auth_router from "./routes/auth_routes.js";
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/users", user_router);
+
+app.use("/api/auth", auth_router);
 
 await db_connection();
 

@@ -1,14 +1,13 @@
 import express from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import {
-  delete_user,
-  get_users,
-  save_user,
-  update_password,
-  update_user,
-} from "../utils/user_utility.js";
+  add_user_route,
+  delete_user_route,
+  get_users_route,
+  update_password_route,
+  update_user_route,
+} from "../controllers/user_controller.js";
 
-import User from "../models/user_model.js";
 const user_router = express.Router();
 
 const validation_add = [
@@ -19,74 +18,27 @@ const validation_add = [
     .withMessage("Password must be at least 6 characters"),
 ];
 
-user_router.get("/", async (req, res) => {
-  const { show_deleted } = req.query;
-  try {
-    const users = await get_users(show_deleted);
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch users" });
-  }
-});
+user_router.get("/", get_users_route);
 
-user_router.post("/", validation_add, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+user_router.post(
+  "/",
+  validation_add,
+  (req, res, next) => {
+    const errors = validationResult(req);
 
-  try {
-    const user = await save_user(req.body);
-    res.status(201).json({ user });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-user_router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { purge } = req.query;
-
-  try {
-    const deleted = await delete_user(id, purge === "true");
-
-    if (!deleted) {
-      return res.status(404).json({ error: "User not found" });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    return res.status(200).json({
-      message:
-        purge === "true" ? "User permanently deleted" : "User soft-deleted",
-    });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
-});
+    next();
+  },
+  add_user_route
+);
 
-user_router.patch("/:id", async (req, res) => {
-  try {
-    const updated_user = await update_user(req.params.id, req.body);
+user_router.delete("/:id", delete_user_route);
 
-    if (!updated_user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+user_router.patch("/:id", update_user_route);
 
-    res.status(200).json(updated_user);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-user_router.patch("/:id/password", async (req, res) => {
-  const { id } = req.params;
-  const { old_password, new_password } = req.body;
-
-  try {
-    const msg = await update_password(id, old_password, new_password);
-    res.status(200).json(msg);
-  } catch (err) {
-    res.status(500).json({ message: "An error occurred", error: err.message });
-  }
-});
+user_router.patch("/:id/password", update_password_route);
 
 export default user_router;

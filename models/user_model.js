@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { USER_ROLES } from "../utils/enums.js";
 
 const user_schema = new mongoose.Schema({
   username: {
@@ -21,11 +20,10 @@ const user_schema = new mongoose.Schema({
   full_name: {
     type: String,
   },
-  role: {
-    type: String,
+  admin: {
+    type: Boolean,
     required: true,
-    enum: USER_ROLES,
-    default: USER_ROLES[0],
+    default: false,
   },
   created: {
     type: Date,
