@@ -4,6 +4,7 @@ import {
   delete_user,
   get_users,
   save_user,
+  update_password,
   update_user,
 } from "../utils/user_utility.js";
 
@@ -73,6 +74,18 @@ user_router.patch("/:id", async (req, res) => {
     res.status(200).json(updated_user);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+user_router.patch("/:id/password", async (req, res) => {
+  const { id } = req.params;
+  const { old_password, new_password } = req.body;
+
+  try {
+    const msg = await update_password(id, old_password, new_password);
+    res.status(200).json(msg);
+  } catch (err) {
+    res.status(500).json({ message: "An error occurred", error: err.message });
   }
 });
 
