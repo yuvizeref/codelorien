@@ -1,4 +1,3 @@
-import { validationResult } from "express-validator";
 import {
   delete_user,
   get_users,

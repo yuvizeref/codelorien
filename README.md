@@ -6,9 +6,7 @@
 
 ## 🚀 Features
 
-- ✅ Add, Update, Delete users
-- ✅ Login with user creds and get token
-- More on the way....
+- ✅ On the way....
 
 ---
 
@@ -21,6 +19,8 @@ cd codelorien
 
 # Install dependencies
 npm install
+
+# Add .env file using .env.example as a template.
 
 # Start the app
 node server.js
