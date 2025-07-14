@@ -26,6 +26,27 @@ const authorizeAdmin = (req, res, next) => {
   next();
 };
 
+const authorizeSelf = (req, res, next) => {
+  const userId = req.params.id;
+  if (req.user?.id !== userId) {
+    return res
+      .status(403)
+      .json({ message: "Access denied: You can only access your own data" });
+  }
+  next();
+};
+
+const authorizeSelfOrAdmin = (req, res, next) => {
+  const userId = req.params.id;
+  if (req.user?.admin || req.user?.id === userId) {
+    return next();
+  }
+  return res.status(403).json({
+    message:
+      "Access denied: Admins or the user themselves can access this data",
+  });
+};
+
 const loginValidations = [
   body("emailOrUsername")
     .notEmpty()
@@ -40,4 +61,11 @@ const validateLogin = (req, res, next) => {
   next();
 };
 
-export { authenticate, authorizeAdmin, loginValidations, validateLogin };
+export {
+  authenticate,
+  authorizeAdmin,
+  authorizeSelf,
+  authorizeSelfOrAdmin,
+  loginValidations,
+  validateLogin,
+};
