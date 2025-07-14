@@ -1,36 +1,36 @@
 import {
-  delete_user,
-  get_users,
-  save_user,
-  update_password,
-  update_user,
-} from "../utils/user_utils.js";
+  deleteUser,
+  getUsers,
+  saveUser,
+  updatePassword,
+  updateUser,
+} from "../utils/userUtils.js";
 
-const get_users_route = async (req, res) => {
-  const { show_deleted } = req.query;
+const getUsersRoute = async (req, res) => {
+  const { showDeleted } = req.query;
   try {
-    const users = await get_users(show_deleted);
+    const users = await getUsers(showDeleted);
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
 
-const add_user_route = async (req, res) => {
+const addUserRoute = async (req, res) => {
   try {
-    const user = await save_user(req.body);
+    const user = await saveUser(req.body);
     res.status(201).json({ user });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-const delete_user_route = async (req, res) => {
+const deleteUserRoute = async (req, res) => {
   const { id } = req.params;
   const { purge } = req.query;
 
   try {
-    const deleted = await delete_user(id, purge === "true");
+    const deleted = await deleteUser(id, purge === "true");
 
     if (!deleted) {
       return res.status(404).json({ error: "User not found" });
@@ -45,30 +45,30 @@ const delete_user_route = async (req, res) => {
   }
 };
 
-const update_user_route = async (req, res) => {
+const updateUserRoute = async (req, res) => {
   try {
-    const updated_user = await update_user(
+    const updatedUser = await updateUser(
       req.params.id,
       req.body,
       req.user.admin
     );
 
-    if (!updated_user) {
+    if (!updatedUser) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json(updated_user);
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-const update_password_route = async (req, res) => {
+const updatePasswordRoute = async (req, res) => {
   const { id } = req.params;
-  const { old_password, new_password } = req.body;
+  const { oldPassword, newPassword } = req.body;
 
   try {
-    const msg = await update_password(id, old_password, new_password);
+    const msg = await updatePassword(id, oldPassword, newPassword);
     res.status(200).json(msg);
   } catch (err) {
     res.status(500).json({ message: "An error occurred", error: err.message });
@@ -76,9 +76,9 @@ const update_password_route = async (req, res) => {
 };
 
 export {
-  get_users_route,
-  add_user_route,
-  delete_user_route,
-  update_user_route,
-  update_password_route,
+  getUsersRoute,
+  addUserRoute,
+  deleteUserRoute,
+  updateUserRoute,
+  updatePasswordRoute,
 };

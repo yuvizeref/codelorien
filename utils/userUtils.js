@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
-import User from "../models/user_model.js";
+import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import { hash_password } from "./common_utils.js";
+import { hashPassword } from "./commonUtils.js";
 
-const save_user = async ({ username, email, password, full_name }) => {
+const saveUser = async ({ username, email, password, fullName }) => {
   const existing = await User.findOne({ $or: [{ email }, { username }] });
   if (existing) throw new Error("User already exists");
 
-  const hashed_password = await hash_password(password);
+  const hashedPassword = await hashPassword(password);
 
   const user = new User({
     username,
     email,
-    password: hashed_password,
-    full_name,
+    password: hashedPassword,
+    fullName,
   });
 
   const saved = await user.save();
@@ -23,7 +23,7 @@ const save_user = async ({ username, email, password, full_name }) => {
   return result;
 };
 
-const delete_user = async (id, purge = false) => {
+const deleteUser = async (id, purge = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
@@ -39,34 +39,34 @@ const delete_user = async (id, purge = false) => {
   }
 };
 
-const get_users = async (show_deleted = false) => {
-  if (show_deleted) return await User.find().select("-password");
+const getUsers = async (showDeleted = false) => {
+  if (showDeleted) return await User.find().select("-password");
   return await User.find({ deleted: false }).select("-password");
 };
 
-const update_user = async (id, updateData, admin = false) => {
+const updateUser = async (id, updateData, admin = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
 
-  let disallowed_fields = ["created"];
+  let disallowedFields = ["created"];
   if (!admin) {
-    disallowed_fields = ["password", "created", "admin"];
+    disallowedFields = ["password", "created", "admin"];
   }
 
-  disallowed_fields.forEach((field) => delete updateData[field]);
+  disallowedFields.forEach((field) => delete updateData[field]);
 
   updateData["modified"] = new Date();
 
-  const updated_user = await User.findByIdAndUpdate(id, updateData, {
+  const updatedUser = await User.findByIdAndUpdate(id, updateData, {
     new: true,
     runValidators: true,
   }).select("-password");
 
-  return updated_user;
+  return updatedUser;
 };
 
-const update_password = async (id, old_password, new_password) => {
+const updatePassword = async (id, oldPassword, newPassword) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
@@ -76,18 +76,15 @@ const update_password = async (id, old_password, new_password) => {
     throw new Error("User not found");
   }
 
-  const is_old_password_valid = await bcrypt.compare(
-    old_password,
-    user.password
-  );
+  const oldPasswordValid = await bcrypt.compare(oldPassword, user.password);
 
-  if (!is_old_password_valid) {
+  if (!oldPasswordValid) {
     throw new Error("Old password is incorrect");
   }
 
-  const hashed_password = await hash_password(new_password);
+  const hashedPassword = await hashPassword(newPassword);
 
-  user.password = hashed_password;
+  user.password = hashedPassword;
   user.modified = new Date();
 
   await user.save();
@@ -95,4 +92,4 @@ const update_password = async (id, old_password, new_password) => {
   return { message: "Password updated successfully" };
 };
 
-export { save_user, delete_user, get_users, update_user, update_password };
+export { saveUser, deleteUser, getUsers, updateUser, updatePassword };

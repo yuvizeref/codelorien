@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
-import { validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 const authenticate = (req, res, next) => {
-  const auth_header = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!auth_header || !auth_header.startsWith("Bearer ")) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No token provided" });
   }
 
-  const token = auth_header.split(" ")[1];
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -19,14 +19,20 @@ const authenticate = (req, res, next) => {
   }
 };
 
-const authorize_admin = (req, res, next) => {
+const authorizeAdmin = (req, res, next) => {
   if (!req.user?.admin) {
     return res.status(403).json({ message: "Access denied: Admins only" });
   }
   next();
 };
 
-const validate_login = (req, res, next) => {
+const loginValidations = [
+  body("emailOrUsername")
+    .notEmpty()
+    .withMessage("Provide a valid email address or user name"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
+const validateLogin = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -34,4 +40,4 @@ const validate_login = (req, res, next) => {
   next();
 };
 
-export { authenticate, authorize_admin, validate_login };
+export { authenticate, authorizeAdmin, loginValidations, validateLogin };
