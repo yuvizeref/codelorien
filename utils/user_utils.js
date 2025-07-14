@@ -29,7 +29,6 @@ const delete_user = async (id, purge = false) => {
   }
 
   if (purge) {
-    // TODO : Limit to admins
     return await User.findByIdAndDelete(id);
   } else {
     return await User.findByIdAndUpdate(
@@ -41,20 +40,23 @@ const delete_user = async (id, purge = false) => {
 };
 
 const get_users = async (show_deleted = false) => {
-  // TODO : Limit to Admins
   if (show_deleted) return await User.find().select("-password");
   return await User.find({ deleted: false }).select("-password");
 };
 
-const update_user = async (id, updateData) => {
+const update_user = async (id, updateData, admin = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
 
-  // Prevent updating sensitive fields here or handle them separately
-  // TODO : Handle user restore and role update after implementing auth. Limit to Admins
-  const disallowed_fields = ["password", "created", "deleted", "role"];
+  let disallowed_fields = ["created"];
+  if (!admin) {
+    disallowed_fields = ["password", "created", "admin"];
+  }
+
   disallowed_fields.forEach((field) => delete updateData[field]);
+
+  updateData["modified"] = new Date();
 
   const updated_user = await User.findByIdAndUpdate(id, updateData, {
     new: true,
@@ -74,7 +76,6 @@ const update_password = async (id, old_password, new_password) => {
     throw new Error("User not found");
   }
 
-  // TODO : Bypass old password check for Admins.
   const is_old_password_valid = await bcrypt.compare(
     old_password,
     user.password
@@ -87,6 +88,7 @@ const update_password = async (id, old_password, new_password) => {
   const hashed_password = await hash_password(new_password);
 
   user.password = hashed_password;
+  user.modified = new Date();
 
   await user.save();
 

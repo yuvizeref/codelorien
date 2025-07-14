@@ -1,5 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
+import { authenticate, authorize_admin } from "../middleware/authenticate.js";
+import { validate_user_add } from "../middleware/user.js";
 import {
   add_user_route,
   delete_user_route,
@@ -10,7 +12,7 @@ import {
 
 const user_router = express.Router();
 
-const validation_add = [
+const validations = [
   body("username").notEmpty().withMessage("Username is required"),
   body("email").isEmail().withMessage("Valid email is required"),
   body("password")
@@ -18,26 +20,13 @@ const validation_add = [
     .withMessage("Password must be at least 6 characters"),
 ];
 
-user_router.get("/", get_users_route);
+user_router.get("/", authenticate, authorize_admin, get_users_route);
 
-user_router.post(
-  "/",
-  validation_add,
-  (req, res, next) => {
-    const errors = validationResult(req);
+user_router.post("/", validations, validate_user_add, add_user_route);
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+user_router.delete("/:id", authenticate, authorize_admin, delete_user_route);
 
-    next();
-  },
-  add_user_route
-);
-
-user_router.delete("/:id", delete_user_route);
-
-user_router.patch("/:id", update_user_route);
+user_router.patch("/:id", authenticate, update_user_route);
 
 user_router.patch("/:id/password", update_password_route);
 

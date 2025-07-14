@@ -23,7 +23,7 @@ const login_route = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = generate_token(user._id);
+    const token = generate_token(user._id, user.admin);
 
     const user_obj = user.toObject();
 
@@ -35,6 +35,11 @@ const login_route = async (req, res) => {
   }
 };
 
-const logout_route = async (req, res) => {};
+const logout_route = async (req, res) => {
+  // TODO : Store and invalidate the token ?
+  res
+    .status(200)
+    .json({ message: "Successfully logged out. Please discard your token." });
+};
 
 export { login_route, logout_route };

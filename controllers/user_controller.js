@@ -48,7 +48,11 @@ const delete_user_route = async (req, res) => {
 
 const update_user_route = async (req, res) => {
   try {
-    const updated_user = await update_user(req.params.id, req.body);
+    const updated_user = await update_user(
+      req.params.id,
+      req.body,
+      req.user.admin
+    );
 
     if (!updated_user) {
       return res.status(404).json({ error: "User not found" });
