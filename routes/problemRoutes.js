@@ -7,6 +7,10 @@ import {
   getProblemsRoute,
   updateProblemRoute,
 } from "../controllers/problemController.js";
+import {
+  problemAddValidations,
+  validateProblemAdd,
+} from "../middleware/problem.js";
 
 const problemRouter = express.Router();
 
@@ -14,7 +18,14 @@ problemRouter.get("/", getProblemsRoute);
 
 problemRouter.get("/:id", getProblemByIdRoute);
 
-problemRouter.post("/", authenticate, authorizeAdmin, addProblemRoute);
+problemRouter.post(
+  "/",
+  authenticate,
+  authorizeAdmin,
+  problemAddValidations,
+  validateProblemAdd,
+  addProblemRoute
+);
 
 problemRouter.patch("/:id", authenticate, authorizeAdmin, updateProblemRoute);
 
