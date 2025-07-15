@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import problemRouter from "./routes/problemRoutes.js";
+import docsRouter from "./routes/docsRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/problems", problemRouter);
+app.use("/api", docsRouter);
 
 await dbConnection();
 

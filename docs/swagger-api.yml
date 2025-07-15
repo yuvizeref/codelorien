@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: Codelorien
+  version: 1.0.0
+  description: Swagger documentation
+
+servers:
+  - url: http://localhost:8000/api
+    description: Local Development Server
+
+paths:
+  /auth/login:
+    post:
+      summary: Log in a user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      summary: Log out a user
+      tags: [Auth]
+      responses:
+        '200':
+          description: Logout successful
+
+  /problems:
+    get:
+      summary: Get all problems
+      tags: [Problems]
+      parameters:
+        - in: query
+          name: showDeleted
+          schema:
+            type: boolean
+          description: Include soft-deleted problems if true
+      responses:
+        '200':
+          description: A list of problems
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Problem'
+    post:
+      summary: Add a new problem (Admin only)
+      tags: [Problems]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProblemInput'
+      responses:
+        '201':
+          description: Problem created
+
+  /problems/{id}:
+    get:
+      summary: Get a problem by ID
+      tags: [Problems]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Problem found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Problem not found
+    patch:
+      summary: Update a problem by ID (Admin only)
+      tags: [Problems]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                difficulty:
+                  type: string
+                  enum: [easy, medium, hard]
+      responses:
+        '200':
+          description: Problem updated
+    delete:
+      summary: Delete a problem by ID (Admin only)
+      tags: [Problems]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: purge
+          schema:
+            type: boolean
+          description: Hard delete if true, soft delete if false or omitted
+      responses:
+        '204':
+          description: Problem deleted
+
+  /users:
+    get:
+      summary: Get all users (Admin only)
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: showDeleted
+          schema:
+            type: boolean
+          description: Include soft-deleted users if true
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Register a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User created
+
+  /users/{id}:
+    delete:
+      summary: Delete a user by ID (Admin only)
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: purge
+          schema:
+            type: boolean
+          description: Hard delete if true, soft delete if false or omitted
+      responses:
+        '204':
+          description: User deleted
+    patch:
+      summary: Update a user's info
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                fullName:
+                  type: string
+      responses:
+        '200':
+          description: User updated
+
+  /users/{id}/password:
+    patch:
+      summary: Update user's password
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordUpdate'
+      responses:
+        '200':
+          description: Password updated
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email/username
+        - password
+      properties:
+        emailOrUsername:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        admin:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        deleted:
+          type: boolean
+
+    UserInput:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        fullName:
+          type: string
+
+    PasswordUpdate:
+      type: object
+      required:
+        - oldPassword
+        - newPassword
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+          minLength: 6
+
+    Problem:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        createdBy:
+          type: string
+        modifiedBy:
+          type: string
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+        deleted:
+          type: boolean
+
+    ProblemInput:
+      type: object
+      required:
+        - name
+        - description
+        - difficulty
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        difficulty:
+          type: string
+          enum: [Easy, Medium, Hard]
