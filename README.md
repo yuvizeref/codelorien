@@ -24,4 +24,4 @@ npm install
 # Add .env file using .env.example as a template.
 
 # Start the app
-node server.js
+npm start
