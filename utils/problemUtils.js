@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Problem from "../models/problemModel.js";
+import TestCases from "../models/testCasesModel.js";
 
 const getProblems = async (showDeleted = false) => {
   if (showDeleted) return await Problem.find();
@@ -21,7 +22,20 @@ const addProblem = async ({ name, description, difficulty }, creator) => {
     createdBy: creator,
     modifiedBy: creator,
   });
-  return await problem.save();
+
+  const saved = await problem.save();
+
+  const testCase = new TestCases();
+
+  testCase.problemId = saved.id;
+  testCase.createdBy = creator;
+  testCase.modifiedBy = creator;
+  testCase.created = new Date();
+  testCase.modified = new Date();
+
+  testCase.save();
+
+  return saved;
 };
 
 const updateProblem = async (id, updateData, user) => {
