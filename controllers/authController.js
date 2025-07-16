@@ -2,7 +2,7 @@ import { generateToken } from "../utils/commonUtils.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 
-const loginRoute = async (req, res) => {
+export const loginRoute = async (req, res) => {
   const { emailOrUsername, password } = req.body;
 
   try {
@@ -35,11 +35,9 @@ const loginRoute = async (req, res) => {
   }
 };
 
-const logoutRoute = async (req, res) => {
+export const logoutRoute = async (req, res) => {
   // TODO : Store and invalidate the token ?
   res
     .status(200)
     .json({ message: "Successfully logged out. Please discard your token." });
 };
-
-export { loginRoute, logoutRoute };

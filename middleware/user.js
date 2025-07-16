@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
 
-const userAddValidations = [
+export const userAddValidations = [
   body("username").notEmpty().withMessage("Username is required"),
   body("email").isEmail().withMessage("Valid email is required"),
   body("password")
@@ -8,7 +8,7 @@ const userAddValidations = [
     .withMessage("Password must be at least 6 characters"),
 ];
 
-const validateUserAdd = (req, res, next) => {
+export const validateUserAdd = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -17,5 +17,3 @@ const validateUserAdd = (req, res, next) => {
 
   next();
 };
-
-export { userAddValidations, validateUserAdd };

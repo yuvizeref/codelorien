@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 
-const authenticate = (req, res, next) => {
+export const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -19,14 +19,14 @@ const authenticate = (req, res, next) => {
   }
 };
 
-const authorizeAdmin = (req, res, next) => {
+export const authorizeAdmin = (req, res, next) => {
   if (!req.user?.admin) {
     return res.status(403).json({ message: "Access denied: Admins only" });
   }
   next();
 };
 
-const authorizeSelf = (req, res, next) => {
+export const authorizeSelf = (req, res, next) => {
   const userId = req.params.id;
   if (req.user?.id !== userId) {
     return res
@@ -36,7 +36,7 @@ const authorizeSelf = (req, res, next) => {
   next();
 };
 
-const authorizeSelfOrAdmin = (req, res, next) => {
+export const authorizeSelfOrAdmin = (req, res, next) => {
   const userId = req.params.id;
   if (req.user?.admin || req.user?.id === userId) {
     return next();
@@ -47,25 +47,17 @@ const authorizeSelfOrAdmin = (req, res, next) => {
   });
 };
 
-const loginValidations = [
+export const loginValidations = [
   body("emailOrUsername")
     .notEmpty()
     .withMessage("Provide a valid email address or user name"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
-const validateLogin = (req, res, next) => {
+
+export const validateLogin = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   next();
-};
-
-export {
-  authenticate,
-  authorizeAdmin,
-  authorizeSelf,
-  authorizeSelfOrAdmin,
-  loginValidations,
-  validateLogin,
 };

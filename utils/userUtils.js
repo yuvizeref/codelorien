@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { hashPassword } from "./commonUtils.js";
 
-const saveUser = async ({ username, email, password, fullName }) => {
+export const saveUser = async ({ username, email, password, fullName }) => {
   const existing = await User.findOne({ $or: [{ email }, { username }] });
   if (existing) throw new Error("User already exists");
 
@@ -23,7 +23,7 @@ const saveUser = async ({ username, email, password, fullName }) => {
   return result;
 };
 
-const deleteUser = async (id, purge = false) => {
+export const deleteUser = async (id, purge = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
@@ -39,12 +39,12 @@ const deleteUser = async (id, purge = false) => {
   }
 };
 
-const getUsers = async (showDeleted = false) => {
+export const getUsers = async (showDeleted = false) => {
   if (showDeleted) return await User.find().select("-password");
   return await User.find({ deleted: false }).select("-password");
 };
 
-const updateUser = async (id, updateData, admin = false) => {
+export const updateUser = async (id, updateData, admin = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
@@ -66,7 +66,7 @@ const updateUser = async (id, updateData, admin = false) => {
   return updatedUser;
 };
 
-const updatePassword = async (id, oldPassword, newPassword) => {
+export const updatePassword = async (id, oldPassword, newPassword) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
@@ -91,5 +91,3 @@ const updatePassword = async (id, oldPassword, newPassword) => {
 
   return { message: "Password updated successfully" };
 };
-
-export { saveUser, deleteUser, getUsers, updateUser, updatePassword };

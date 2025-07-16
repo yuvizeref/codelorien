@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { difficulties } from "../utils/enums.js";
 
-const problemAddValidations = [
+export const problemAddValidations = [
   body("name").notEmpty().withMessage("Name is required"),
   body("description").notEmpty().withMessage("Description is required"),
   body("difficulty")
@@ -9,7 +9,7 @@ const problemAddValidations = [
     .withMessage(`Difficulty must be one of: ${difficulties.join(", ")}`),
 ];
 
-const validateProblemAdd = (req, res, next) => {
+export const validateProblemAdd = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -18,5 +18,3 @@ const validateProblemAdd = (req, res, next) => {
 
   next();
 };
-
-export { problemAddValidations, validateProblemAdd };

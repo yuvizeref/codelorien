@@ -6,7 +6,7 @@ import {
   updateUser,
 } from "../utils/userUtils.js";
 
-const getUsersRoute = async (req, res) => {
+export const getUsersRoute = async (req, res) => {
   const { showDeleted } = req.query;
   try {
     const users = await getUsers(showDeleted);
@@ -16,7 +16,7 @@ const getUsersRoute = async (req, res) => {
   }
 };
 
-const addUserRoute = async (req, res) => {
+export const addUserRoute = async (req, res) => {
   try {
     const user = await saveUser(req.body);
     res.status(201).json({ user });
@@ -25,7 +25,7 @@ const addUserRoute = async (req, res) => {
   }
 };
 
-const deleteUserRoute = async (req, res) => {
+export const deleteUserRoute = async (req, res) => {
   const { id } = req.params;
   const { purge } = req.query;
 
@@ -45,7 +45,7 @@ const deleteUserRoute = async (req, res) => {
   }
 };
 
-const updateUserRoute = async (req, res) => {
+export const updateUserRoute = async (req, res) => {
   try {
     const updatedUser = await updateUser(
       req.params.id,
@@ -63,7 +63,7 @@ const updateUserRoute = async (req, res) => {
   }
 };
 
-const updatePasswordRoute = async (req, res) => {
+export const updatePasswordRoute = async (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword } = req.body;
 
@@ -73,12 +73,4 @@ const updatePasswordRoute = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "An error occurred", error: err.message });
   }
-};
-
-export {
-  getUsersRoute,
-  addUserRoute,
-  deleteUserRoute,
-  updateUserRoute,
-  updatePasswordRoute,
 };

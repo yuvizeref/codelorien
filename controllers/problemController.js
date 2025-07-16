@@ -6,7 +6,7 @@ import {
   updateProblem,
 } from "../utils/problemUtils.js";
 
-const getProblemsRoute = async (req, res) => {
+export const getProblemsRoute = async (req, res) => {
   const { showDeleted } = req.query;
   try {
     const problems = await getProblems(showDeleted);
@@ -16,7 +16,7 @@ const getProblemsRoute = async (req, res) => {
   }
 };
 
-const getProblemByIdRoute = async (req, res) => {
+export const getProblemByIdRoute = async (req, res) => {
   const { id } = req.params;
   try {
     const problem = await getProblemById(id);
@@ -26,7 +26,7 @@ const getProblemByIdRoute = async (req, res) => {
   }
 };
 
-const addProblemRoute = async (req, res) => {
+export const addProblemRoute = async (req, res) => {
   try {
     const problem = await addProblem(req.body, req.user.id);
     res.status(201).json({ problem });
@@ -35,7 +35,7 @@ const addProblemRoute = async (req, res) => {
   }
 };
 
-const updateProblemRoute = async (req, res) => {
+export const updateProblemRoute = async (req, res) => {
   try {
     const updatedProblem = await updateProblem(
       req.params.id,
@@ -53,7 +53,7 @@ const updateProblemRoute = async (req, res) => {
   }
 };
 
-const deleteProblemRoute = async (req, res) => {
+export const deleteProblemRoute = async (req, res) => {
   const { id } = req.params;
   const { purge } = req.query;
   try {
@@ -70,12 +70,4 @@ const deleteProblemRoute = async (req, res) => {
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
-};
-
-export {
-  getProblemsRoute,
-  getProblemByIdRoute,
-  addProblemRoute,
-  updateProblemRoute,
-  deleteProblemRoute,
 };
