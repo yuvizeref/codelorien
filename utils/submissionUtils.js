@@ -3,7 +3,7 @@ import Submission from "../models/submissionModel.js";
 import { languageExtensions } from "./commonUtils.js";
 import { statuses } from "./enums.js";
 import { generateFileObject } from "./fileUtils.js";
-import { uploadFileToStorage } from "./storage.js";
+import { deleteFileFromStorage, uploadFileToStorage } from "./storage.js";
 
 export const getSubmissions = async (problemId, userId) => {
   if (!mongoose.Types.ObjectId.isValid(problemId)) {
@@ -59,5 +59,9 @@ export const deleteSubmission = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid submission ID");
   }
+  const submission = await Submission.findById(id);
+
+  deleteFileFromStorage(submission.code, "/code/");
+
   return await Submission.findByIdAndDelete(id);
 };

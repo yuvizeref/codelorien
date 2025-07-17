@@ -23,3 +23,21 @@ export const getFileFromStorage = (filename, dir) => {
   const filePath = path.join(STORAGE_PATH + dir, filename);
   return filePath;
 };
+
+export const deleteFileFromStorage = (filename, dir) => {
+  const filePath = path.join(STORAGE_PATH, dir, filename);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.log(`File ${filename} does not exist.`);
+      return;
+    }
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err.message);
+        return;
+      }
+      console.log(`File ${filename} deleted successfully.`);
+    });
+  });
+};
