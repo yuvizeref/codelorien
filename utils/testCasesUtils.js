@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
-import { getFileFromStorage, uploadFileToStorage } from "./storage.js";
+import {
+  deleteFileFromStorage,
+  getFileFromStorage,
+  uploadFileToStorage,
+} from "./storage.js";
 import TestCases from "../models/testCasesModel.js";
 
 export const getTestCases = async (id) => {
@@ -55,5 +59,11 @@ export const deleteTestCases = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid problem ID");
   }
+  const testCase = await TestCases.findById(id);
+
+  if (testCase.input) deleteFileFromStorage(testCase.input, "/tc/input/");
+
+  if (testCase.output) deleteFileFromStorage(testCase.output, "/tc/output/");
+
   return await TestCases.findByIdAndDelete(id);
 };
