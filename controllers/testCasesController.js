@@ -1,7 +1,6 @@
 import {
-  addInputTestCase,
-  addOutputTestCase,
-  deleteTestCase,
+  addTestCases,
+  deleteTestCases,
   getTestCases,
 } from "../utils/testCasesUtils.js";
 
@@ -15,31 +14,11 @@ export const getTestCasesRoute = async (req, res) => {
   }
 };
 
-export const addInputTestCasesRoute = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-
+export const addTestCasesRoute = async (req, res) => {
   try {
-    const testCase = await addInputTestCase(
-      req.file,
-      req.params.id,
-      req.user.id
-    );
-    res.status(200).json({ testCase });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-};
-
-export const addOutputTestCasesRoute = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-
-  try {
-    const testCase = await addOutputTestCase(
-      req.file,
+    const testCase = await addTestCases(
+      req.files.input[0],
+      req.files.output[0],
       req.params.id,
       req.user.id
     );
@@ -52,7 +31,7 @@ export const addOutputTestCasesRoute = async (req, res) => {
 export const deleteTestCasesRoute = async (req, res) => {
   const { id } = req.params;
   try {
-    await deleteTestCase(id);
+    await deleteTestCases(id);
     return res.status(200).json({
       message: "Test case is deleted.",
     });

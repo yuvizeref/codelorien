@@ -2,11 +2,11 @@ import express from "express";
 import multer from "multer";
 import { authenticate, authorizeAdmin } from "../middleware/authenticate.js";
 import {
-  addInputTestCasesRoute,
-  addOutputTestCasesRoute,
+  addTestCasesRoute,
   deleteTestCasesRoute,
   getTestCasesRoute,
 } from "../controllers/testCasesController.js";
+import { validateFiles, validateFileUpload } from "../middleware/testCases.js";
 
 const testCasesRouter = express.Router();
 
@@ -17,19 +17,16 @@ const upload = multer({ storage });
 testCasesRouter.get("/:id", authenticate, authorizeAdmin, getTestCasesRoute);
 
 testCasesRouter.post(
-  "/:id/input",
+  "/:id",
   authenticate,
   authorizeAdmin,
-  upload.single("file"),
-  addInputTestCasesRoute
-);
-
-testCasesRouter.post(
-  "/:id/output",
-  authenticate,
-  authorizeAdmin,
-  upload.single("file"),
-  addOutputTestCasesRoute
+  upload.fields([
+    { name: "input", maxCount: 1 },
+    { name: "output", maxCount: 1 },
+  ]),
+  validateFiles,
+  validateFileUpload,
+  addTestCasesRoute
 );
 
 testCasesRouter.delete(

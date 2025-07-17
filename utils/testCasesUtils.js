@@ -17,46 +17,19 @@ export const getTestCases = async (id) => {
   return testCase;
 };
 
-export const addInputTestCase = async (file, problemId, userId) => {
+export const addTestCases = async (input, output, problemId, userId) => {
   if (!mongoose.Types.ObjectId.isValid(problemId)) {
     throw new Error("Invalid problem ID");
   }
 
-  const filePath = uploadFileToStorage(file, "/tc/input");
+  const inputFilePath = uploadFileToStorage(input, "/tc/input");
+  const outputFilePath = uploadFileToStorage(output, "/tc/output");
 
   const testCase = await TestCases.findOne({ problemId: problemId });
 
   if (testCase) {
-    testCase.input = filePath;
-    testCase.modifiedBy = userId;
-    testCase.modified = new Date();
-
-    return await testCase.save();
-  } else {
-    const newTestCase = new TestCases();
-
-    newTestCase.input = filePath;
-    newTestCase.problemId = problemId;
-    newTestCase.createdBy = userId;
-    newTestCase.modifiedBy = userId;
-    newTestCase.created = new Date();
-    newTestCase.modified = new Date();
-
-    return await newTestCase.save();
-  }
-};
-
-export const addOutputTestCase = async (file, problemId, userId) => {
-  if (!mongoose.Types.ObjectId.isValid(problemId)) {
-    throw new Error("Invalid problem ID");
-  }
-
-  const filePath = uploadFileToStorage(file, "/tc/output");
-
-  const testCase = await TestCases.findOne({ problemId: problemId });
-
-  if (testCase) {
-    testCase.output = filePath;
+    testCase.input = inputFilePath;
+    testCase.output = outputFilePath;
     testCase.modifiedBy = userId;
     testCase.modified = new Date();
 
@@ -65,7 +38,8 @@ export const addOutputTestCase = async (file, problemId, userId) => {
   } else {
     const newTestCase = new TestCases();
 
-    newTestCase.output = filePath;
+    newTestCase.input = inputFilePath;
+    newTestCase.output = outputFilePath;
     newTestCase.problemId = problemId;
     newTestCase.createdBy = userId;
     newTestCase.modifiedBy = userId;
@@ -77,7 +51,7 @@ export const addOutputTestCase = async (file, problemId, userId) => {
   }
 };
 
-export const deleteTestCase = async (id) => {
+export const deleteTestCases = async (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid problem ID");
   }
