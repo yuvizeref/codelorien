@@ -10,3 +10,17 @@ export const generateToken = (id, admin) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
+
+export const languageExtensions = {
+  js: ".js",
+  py: ".py",
+  java: ".java",
+  go: ".go",
+  c: ".c",
+  cpp: ".cpp",
+  ruby: ".rb",
+  html: ".html",
+  css: ".css",
+  php: ".php",
+  ts: ".ts",
+};

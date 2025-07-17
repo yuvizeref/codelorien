@@ -7,14 +7,14 @@ dotenv.config();
 
 const STORAGE_PATH = process.env.STORAGE_PATH || "./storage";
 
-export const uploadFileToStorage = (file, dir) => {
+export const uploadFileToStorage = (file, dir, ext = "") => {
   const uploadDir = path.resolve(STORAGE_PATH + dir);
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  const filePath = path.join(uploadDir, uuidv4());
+  const filePath = path.join(uploadDir, uuidv4() + ext);
   fs.writeFileSync(filePath, file.buffer);
   return path.basename(filePath);
 };

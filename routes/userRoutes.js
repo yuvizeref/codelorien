@@ -20,10 +20,15 @@ userRouter.get("/", authenticate, authorizeAdmin, getUsersRoute);
 
 userRouter.post("/", userAddValidations, validateUserAdd, addUserRoute);
 
-userRouter.delete("/:id", authenticate, authorizeAdmin, deleteUserRoute);
+userRouter.delete("/:userId", authenticate, authorizeAdmin, deleteUserRoute);
 
-userRouter.patch("/:id", authenticate, authorizeSelfOrAdmin, updateUserRoute);
+userRouter.patch(
+  "/:userId",
+  authenticate,
+  authorizeSelfOrAdmin,
+  updateUserRoute
+);
 
-userRouter.patch("/:id/password", authorizeSelf, updatePasswordRoute);
+userRouter.patch("/:userId/password", authorizeSelf, updatePasswordRoute);
 
 export default userRouter;

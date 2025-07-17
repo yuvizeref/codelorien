@@ -6,6 +6,7 @@ import authRouter from "./routes/authRoutes.js";
 import problemRouter from "./routes/problemRoutes.js";
 import docsRouter from "./routes/docsRoutes.js";
 import testCasesRouter from "./routes/testCasesRoutes.js";
+import submissionRouter from "./routes/submissionRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/problems", problemRouter);
 app.use("/api/testcases", testCasesRouter);
+app.use("/api/submissions", submissionRouter);
 app.use("/api", docsRouter);
 
 await dbConnection();

@@ -27,7 +27,7 @@ export const authorizeAdmin = (req, res, next) => {
 };
 
 export const authorizeSelf = (req, res, next) => {
-  const userId = req.params.id;
+  const userId = req.params.userId || req.body.userId;
   if (req.user?.id !== userId) {
     return res
       .status(403)

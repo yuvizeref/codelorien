@@ -26,11 +26,11 @@ export const addUserRoute = async (req, res) => {
 };
 
 export const deleteUserRoute = async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   const { purge } = req.query;
 
   try {
-    const deleted = await deleteUser(id, purge === "true");
+    const deleted = await deleteUser(userId, purge === "true");
 
     if (!deleted) {
       return res.status(404).json({ error: "User not found" });
@@ -48,7 +48,7 @@ export const deleteUserRoute = async (req, res) => {
 export const updateUserRoute = async (req, res) => {
   try {
     const updatedUser = await updateUser(
-      req.params.id,
+      req.params.userId,
       req.body,
       req.user.admin
     );
@@ -64,11 +64,11 @@ export const updateUserRoute = async (req, res) => {
 };
 
 export const updatePasswordRoute = async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   const { oldPassword, newPassword } = req.body;
 
   try {
-    const msg = await updatePassword(id, oldPassword, newPassword);
+    const msg = await updatePassword(userId, oldPassword, newPassword);
     res.status(200).json(msg);
   } catch (err) {
     res.status(500).json({ message: "An error occurred", error: err.message });
