@@ -9,6 +9,5 @@ export const statuses = [
   "running",
   "time_limit_exceeded",
   "memory_limit_exceeded",
-  "compilation_error",
-  "runtime_error",
+  "error",
 ];

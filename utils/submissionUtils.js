@@ -5,6 +5,8 @@ import { statuses } from "./enums.js";
 import { generateFileObject } from "./fileUtils.js";
 import { deleteFileFromStorage, uploadFileToStorage } from "./storage.js";
 
+const codeStore = "code";
+
 export const getSubmissions = async (problemId, userId) => {
   if (!mongoose.Types.ObjectId.isValid(problemId)) {
     throw new Error("Invalid problem ID");
@@ -39,7 +41,7 @@ export const addSubmission = async ({ problemId, code, language }, userId) => {
 
   const fileName = uploadFileToStorage(
     codeObject,
-    "/code/",
+    codeStore,
     languageExtensions[language]
   );
 
@@ -61,7 +63,7 @@ export const deleteSubmission = async (id) => {
   }
   const submission = await Submission.findById(id);
 
-  deleteFileFromStorage(submission.code, "/code/");
+  deleteFileFromStorage(submission.code, codeStore);
 
   return await Submission.findByIdAndDelete(id);
 };

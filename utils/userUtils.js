@@ -91,3 +91,20 @@ export const updatePassword = async (id, oldPassword, newPassword) => {
 
   return { message: "Password updated successfully" };
 };
+
+export const createAdminUser = async () => {
+  const admin = await User.findOne({ username: "admin" });
+
+  if (!admin) {
+    const user = new User();
+
+    user.username = "admin";
+    user.email = "admin@admin.com";
+    user.password = await hashPassword(process.env.ADMIN_PASS);
+    user.admin = true;
+    user.created = new Date();
+    user.modified = new Date();
+
+    await user.save();
+  }
+};

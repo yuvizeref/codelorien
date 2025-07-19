@@ -5,10 +5,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const STORAGE_PATH = process.env.STORAGE_PATH || "./storage";
+const storages = {
+  code: process.env.CODE_PATH,
+  input: process.env.INPUT_TC_PATH,
+  output: process.env.OUTPUT_TC_PATH,
+};
 
-export const uploadFileToStorage = (file, dir, ext = "") => {
-  const uploadDir = path.resolve(STORAGE_PATH + dir);
+export const uploadFileToStorage = (file, store, ext = "") => {
+  const uploadDir = storages[store];
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
@@ -19,13 +23,14 @@ export const uploadFileToStorage = (file, dir, ext = "") => {
   return path.basename(filePath);
 };
 
-export const getFileFromStorage = (filename, dir) => {
-  const filePath = path.join(STORAGE_PATH + dir, filename);
+export const getFileFromStorage = (filename, store) => {
+  const filePath = path.join(storages[store], filename);
   return filePath;
 };
 
-export const deleteFileFromStorage = (filename, dir) => {
-  const filePath = path.join(STORAGE_PATH, dir, filename);
+export const deleteFileFromStorage = (filename, store) => {
+  const filePath = path.join(storages[store], filename);
+
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.log(`File ${filename} does not exist.`);
@@ -37,7 +42,6 @@ export const deleteFileFromStorage = (filename, dir) => {
         console.error("Error deleting file:", err.message);
         return;
       }
-      console.log(`File ${filename} deleted successfully.`);
     });
   });
 };

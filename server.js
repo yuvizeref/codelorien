@@ -7,6 +7,7 @@ import problemRouter from "./routes/problemRoutes.js";
 import docsRouter from "./routes/docsRoutes.js";
 import testCasesRouter from "./routes/testCasesRoutes.js";
 import submissionRouter from "./routes/submissionRoutes.js";
+import { createAdminUser } from "./utils/userUtils.js";
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ app.use("/api/submissions", submissionRouter);
 app.use("/api", docsRouter);
 
 await dbConnection();
+
+await createAdminUser();
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`✅ Server is running on port : ${process.env.SERVER_PORT}`);
