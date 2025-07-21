@@ -9,7 +9,7 @@ export const getSubmissionsRoute = async (req, res) => {
   const [problemId, userId] = req.params;
   try {
     const submissions = await getSubmissions(problemId, userId);
-    res.status(200).json(submissions);
+    res.status(200).json({ submissions });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -18,7 +18,7 @@ export const getSubmissionsRoute = async (req, res) => {
 export const getSubmissionRoute = async (req, res) => {
   try {
     const submission = await getSubmission(req.params.id);
-    res.status(200).json(submission);
+    res.status(200).json({ submission });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -27,7 +27,7 @@ export const getSubmissionRoute = async (req, res) => {
 export const addSubmissionRoute = async (req, res) => {
   try {
     const submission = await addSubmission(req.body, req.user.id);
-    res.status(200).json(submission);
+    res.status(200).json({ submission });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

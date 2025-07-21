@@ -1,69 +1,65 @@
-import dotenv from "dotenv";
-import { exec } from "child_process";
 import path from "path";
-import { copyFileToDir, deleteFile } from "../utils/fileUtils.js";
+import { exec, spawn } from "child_process";
+import { promisify } from "util";
+import {
+  createFile,
+  createStaging,
+  deleteFileOrDir,
+} from "../utils/fileUtils.js";
 
-dotenv.config();
+const execPromise = promisify(exec);
 
-export const runCode = async (codePath) => {
+export const runCode = async (code, input) => {
+  let stagingDir;
   try {
-    const codeFilePath = copyCodeToStaging(codePath);
-
-    const compiledFilePath = path.join(
-      process.env.STAGING_PATH,
-      "/compiled.out"
-    );
-
-    const result = await run(codeFilePath, compiledFilePath);
-
-    return result;
+    stagingDir = createStaging();
+    const output = await run(code, input, stagingDir);
+    return output;
   } catch (err) {
-    return {
-      success: false,
-      error: err.error,
-    };
+    throw err;
+  } finally {
+    if (stagingDir) {
+      deleteFileOrDir(stagingDir);
+    }
   }
 };
 
-const copyCodeToStaging = (codePath) => {
-  const codeStagingPath = path.join(process.env.STAGING_PATH, "/run.cpp");
-
+export const run = async (code, input, stagingDir) => {
   try {
-    copyFileToDir(codePath, codeStagingPath);
-  } catch (err) {
-    throw new Error("Failed to copy code to staging directory.");
-  }
+    const codeFilePath = createFile(code, stagingDir, "run.cpp");
+    const compiledFilePath = path.join(stagingDir, "compiled.out");
 
-  return codeStagingPath;
-};
+    await execPromise(`g++ ${codeFilePath} -o ${compiledFilePath}`);
 
-const run = (codeFilePath, compiledFilePath) => {
-  return new Promise((resolve, reject) => {
-    exec(
-      `g++ ${codeFilePath} -o ${compiledFilePath}`,
-      (compileErr, stdout, stderr) => {
-        if (compileErr || stderr) {
-          return reject({
-            success: false,
-            error: `Compilation error: ${stderr || compileErr}`,
-          });
+    const compiledProcess = spawn(compiledFilePath);
+
+    if (input) {
+      compiledProcess.stdin.write(input);
+      compiledProcess.stdin.end();
+    }
+
+    let output = "";
+
+    compiledProcess.stdout.on("data", (data) => {
+      output += data.toString();
+    });
+
+    compiledProcess.stderr.on("data", (data) => {
+      throw new Error(`Runtime error: ${data.toString()}`);
+    });
+
+    const exitCode = await new Promise((resolve, reject) => {
+      compiledProcess.on("close", (code) => {
+        if (code === 0) {
+          resolve(output);
+        } else {
+          reject(`Process exited with code ${code}`);
         }
-        exec(compiledFilePath, (runErr, runStdout, runStderr) => {
-          deleteFile(compiledFilePath);
+      });
+    });
 
-          if (runErr || runStderr) {
-            return reject({
-              success: false,
-              error: `Runtime error: ${runStderr || runErr}`,
-            });
-          }
-
-          resolve({
-            success: true,
-            output: runStdout,
-          });
-        });
-      }
-    );
-  });
+    return output;
+  } catch (error) {
+    throw error;
+  }
 };

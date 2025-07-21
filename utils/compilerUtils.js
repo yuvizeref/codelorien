@@ -1,11 +1,6 @@
-import dotenv from "dotenv";
 import { runCode as runCPPCode } from "../compilers/cpp.js";
 import { runCode as runJavaCode } from "../compilers/java.js";
 import { runCode as runPythonCode } from "../compilers/python.js";
-import { getFileFromStorage } from "./storage.js";
-import { getSubmission } from "./submissionUtils.js";
-
-dotenv.config();
 
 const compilerMap = {
   cpp: runCPPCode,
@@ -13,15 +8,11 @@ const compilerMap = {
   py: runPythonCode,
 };
 
-export const runSubmission = async (submissionId) => {
+export const runCode = async (code, input, language) => {
   try {
-    const submission = await getSubmission(submissionId);
+    const compileAndRun = compilerMap[language];
 
-    const codeFilePath = getFileFromStorage(submission.code, "code");
-
-    const compileAndRun = compilerMap[submission.language];
-
-    const result = await compileAndRun(codeFilePath);
+    const result = await compileAndRun(code, input);
 
     return result;
   } catch (err) {

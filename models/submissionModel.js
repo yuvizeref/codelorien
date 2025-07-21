@@ -24,6 +24,18 @@ const submissionSchema = new mongoose.Schema({
     enum: statuses,
     required: true,
   },
+  passedTests: {
+    type: [Number],
+  },
+  failedTests: {
+    type: [Number],
+  },
+  error: {
+    type: String,
+  },
+  executionTime: {
+    type: Number,
+  },
   created: {
     type: Date,
     required: true,

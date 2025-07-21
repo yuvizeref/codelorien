@@ -9,6 +9,10 @@ const testCasesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  linesPerCase: {
+    type: Number,
+    required: true,
+  },
   problemId: {
     type: String,
     unique: true,

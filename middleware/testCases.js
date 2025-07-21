@@ -1,21 +1,14 @@
-import { check, validationResult } from "express-validator";
+import { body, validationResult } from "express-validator";
 
 export const validateFiles = [
-  check("input").custom((value, { req }) => {
-    if (!req.files || !req.files.input) {
-      throw new Error("Input file is required.");
-    }
-    return true;
-  }),
-  check("output").custom((value, { req }) => {
-    if (!req.files || !req.files.output) {
-      throw new Error("Output file is required.");
-    }
-    return true;
-  }),
+  body("output").notEmpty().withMessage("Output is required"),
+  body("input").isString().withMessage("Input must be a string"),
+  body("linesPerCase")
+    .isInt({ min: 1 })
+    .withMessage("linesPerCase must be a non-negative integer"),
 ];
 
-export const validateFileUpload = (req, res, next) => {
+export const validateTestCases = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {

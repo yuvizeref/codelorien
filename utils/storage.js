@@ -5,43 +5,47 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const storages = {
-  code: process.env.CODE_PATH,
-  input: process.env.INPUT_TC_PATH,
-  output: process.env.OUTPUT_TC_PATH,
-};
+const baseDir = process.env.STORAGE_BASE;
 
-export const uploadFileToStorage = (file, store, ext = "") => {
-  const uploadDir = storages[store];
+export const uploadFileToStorage = (fileContent) => {
+  const currentDate = new Date();
 
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const hour = String(currentDate.getHours()).padStart(2, "0");
+
+  const fileName = uuidv4();
+
+  const dirPath = path.join(baseDir, String(year), month, day, hour);
+
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
   }
 
-  const filePath = path.join(uploadDir, uuidv4() + ext);
-  fs.writeFileSync(filePath, file.buffer);
-  return path.basename(filePath);
+  const filePath = path.join(dirPath, fileName);
+
+  fs.writeFileSync(filePath, fileContent);
+  const fileKey = path.join(String(year), month, day, hour, fileName);
+  return fileKey;
 };
 
-export const getFileFromStorage = (filename, store) => {
-  const filePath = path.join(storages[store], filename);
-  return filePath;
+export const getFileFromStorage = (fileKey) => {
+  const filePath = path.join(baseDir, fileKey);
+
+  if (fs.existsSync(filePath)) {
+    return fs.readFileSync(filePath, "utf8");
+  } else {
+    throw new Error("File not found");
+  }
 };
 
-export const deleteFileFromStorage = (filename, store) => {
-  const filePath = path.join(storages[store], filename);
+export const deleteFileFromStorage = async (fileKey) => {
+  const filePath = path.join(baseDir, fileKey);
 
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      console.log(`File ${filename} does not exist.`);
-      return;
-    }
-
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err.message);
-        return;
-      }
-    });
-  });
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (error) {
+    throw new Error("File not found or failed to delete");
+  }
 };

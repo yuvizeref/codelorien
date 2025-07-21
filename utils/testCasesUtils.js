@@ -6,40 +6,36 @@ import {
 } from "./storage.js";
 import TestCases from "../models/testCasesModel.js";
 
-const inputStore = "input";
-const outputStore = "output";
-
-export const getTestCases = async (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error("Invalid test case ID");
+export const getTestCases = async (problemId) => {
+  if (!mongoose.Types.ObjectId.isValid(problemId)) {
+    throw new Error("Invalid Problem ID");
   }
-  const testCase = await TestCases.findOne({ problemId: id });
-
-  if (testCase.input)
-    testCase.input = getFileFromStorage(testCase.input, inputStore);
-
-  if (testCase.output)
-    testCase.output = getFileFromStorage(testCase.output, outputStore);
-
-  return testCase;
+  return await TestCases.findOne({ problemId: problemId });
 };
 
-export const addTestCases = async (input, output, problemId, userId) => {
+export const addTestCases = async (
+  input,
+  output,
+  linesPerCase,
+  problemId,
+  userId
+) => {
   if (!mongoose.Types.ObjectId.isValid(problemId)) {
     throw new Error("Invalid problem ID");
   }
 
-  const inputFilePath = uploadFileToStorage(input, inputStore);
-  const outputFilePath = uploadFileToStorage(output, outputStore);
+  const inputFilePath = uploadFileToStorage(input);
+  const outputFilePath = uploadFileToStorage(output);
 
   const testCase = await TestCases.findOne({ problemId: problemId });
 
   if (testCase) {
-    deleteFileFromStorage(testCase.input, inputStore);
-    deleteFileFromStorage(testCase.output, outputStore);
+    deleteFileFromStorage(testCase.input);
+    deleteFileFromStorage(testCase.output);
 
     testCase.input = inputFilePath;
     testCase.output = outputFilePath;
+    testCase.linesPerCase = linesPerCase;
     testCase.modifiedBy = userId;
     testCase.modified = new Date();
 
@@ -50,6 +46,7 @@ export const addTestCases = async (input, output, problemId, userId) => {
 
     newTestCase.input = inputFilePath;
     newTestCase.output = outputFilePath;
+    newTestCase.linesPerCase = linesPerCase;
     newTestCase.problemId = problemId;
     newTestCase.createdBy = userId;
     newTestCase.modifiedBy = userId;
@@ -67,9 +64,9 @@ export const deleteTestCases = async (id) => {
   }
   const testCase = await TestCases.findById(id);
 
-  if (testCase.input) deleteFileFromStorage(testCase.input, inputStore);
+  if (testCase.input) deleteFileFromStorage(testCase.input);
 
-  if (testCase.output) deleteFileFromStorage(testCase.output, outputStore);
+  if (testCase.output) deleteFileFromStorage(testCase.output);
 
   return await TestCases.findByIdAndDelete(id);
 };

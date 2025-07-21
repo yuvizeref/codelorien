@@ -10,7 +10,7 @@ export const getProblemsRoute = async (req, res) => {
   const { showDeleted } = req.query;
   try {
     const problems = await getProblems(showDeleted);
-    res.status(200).json(problems);
+    res.status(200).json({ problems });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch problems" });
   }
@@ -20,7 +20,7 @@ export const getProblemByIdRoute = async (req, res) => {
   const { id } = req.params;
   try {
     const problem = await getProblemById(id);
-    res.status(200).json(problem);
+    res.status(200).json({ problem });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch problem" });
   }

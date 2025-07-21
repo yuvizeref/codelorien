@@ -1,1 +1,1 @@
-export const runCode = (codePath) => {};
+export const runCode = (code, input) => {};

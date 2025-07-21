@@ -17,8 +17,9 @@ export const getTestCasesRoute = async (req, res) => {
 export const addTestCasesRoute = async (req, res) => {
   try {
     const testCase = await addTestCases(
-      req.files.input[0],
-      req.files.output[0],
+      req.body.input,
+      req.body.output,
+      req.body.linesPerCase,
       req.params.id,
       req.user.id
     );

@@ -1,39 +1,49 @@
+import dotenv from "dotenv";
+import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
-import { promises as fsPromises } from "fs";
 import path from "path";
 
-export const generateFileObject = (content) => {
-  try {
-    const fileBuffer = Buffer.from(content, "utf-8");
-    return { buffer: fileBuffer };
-  } catch (err) {
-    throw err;
-  }
+dotenv.config();
+
+export const createStaging = () => {
+  const stagingName = uuidv4();
+
+  const stagingPath = path.join(process.env.STAGING_BASE, stagingName);
+
+  fs.mkdirSync(stagingPath, { recursive: true });
+
+  return stagingPath;
 };
 
-export const copyFileToDir = async (srcFilePath, destFilePath) => {
+export const deleteFileOrDir = async (targetPath) => {
   try {
-    const destDir = path.dirname(destFilePath);
-    await fsPromises.mkdir(destDir, { recursive: true });
-
-    await fsPromises.copyFile(srcFilePath, destFilePath);
+    const stats = await fs.promises.stat(targetPath);
+    if (stats.isFile()) {
+      await fs.promises.unlink(targetPath);
+    } else if (stats.isDirectory()) {
+      const files = await fs.promises.readdir(targetPath);
+      for (const file of files) {
+        const currentPath = path.join(targetPath, file);
+        await deleteFileOrDir(currentPath);
+      }
+      await fs.promises.rmdir(targetPath);
+    }
   } catch (error) {
-    throw new Error(`Error copying file: ${error.message}`);
+    console.error(`Error deleting ${targetPath}:`, error);
   }
 };
 
-export const deleteFile = async (filePath) => {
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      console.log(`File ${filePath} does not exist.`);
-      return;
+export const createFile = (fileContent, folder, fileName) => {
+  try {
+    if (!fs.existsSync(folder)) {
+      fs.mkdirSync(folder, { recursive: true });
     }
 
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err.message);
-        return;
-      }
-    });
-  });
+    const filePath = path.join(folder, fileName);
+
+    fs.writeFileSync(filePath, fileContent);
+    return filePath;
+  } catch (error) {
+    console.error("Error creating the file:", error);
+  }
 };
