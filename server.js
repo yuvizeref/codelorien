@@ -9,12 +9,14 @@ import testCasesRouter from "./routes/testCasesRoutes.js";
 import submissionRouter from "./routes/submissionRoutes.js";
 import { createAdminUser } from "./utils/userUtils.js";
 import judgeRouter from "./routes/judgeRoutes.js";
+import cors from "./middleware/corsConfig.js";
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use(cors);
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
