@@ -33,6 +33,9 @@ const submissionSchema = new mongoose.Schema({
   error: {
     type: String,
   },
+  evaluated: {
+    type: Boolean,
+  },
   executionTime: {
     type: Number,
   },

@@ -28,6 +28,7 @@ export const evaluateSubmission = async (submission) => {
       await updateSubmission(submission.id, {
         status: "failed",
         error: err.stderr,
+        evaluated: true,
       });
     });
 };
@@ -50,6 +51,7 @@ const judgeResult = async (submissionId, output) => {
       failedTests: failed,
       status: failed.length > 0 ? "failed" : "accepted",
       error: "",
+      evaluated: true,
     });
   } catch (err) {
     throw err;
