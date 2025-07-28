@@ -58,15 +58,15 @@ export const addTestCases = async (
   }
 };
 
-export const deleteTestCases = async (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+export const deleteTestCases = async (problemId) => {
+  if (!mongoose.Types.ObjectId.isValid(problemId)) {
     throw new Error("Invalid problem ID");
   }
-  const testCase = await TestCases.findById(id);
+  const testCase = await TestCases.findById(problemId);
 
   if (testCase.input) deleteFileFromStorage(testCase.input);
 
   if (testCase.output) deleteFileFromStorage(testCase.output);
 
-  return await TestCases.findByIdAndDelete(id);
+  return await TestCases.findByIdAndDelete(testCase._id);
 };

@@ -1,0 +1,57 @@
+.verdict-container {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.verdict-box {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.verdict-box h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.verdict-box.accepted {
+  background-color: #d1fae5;
+  border: 2px solid #34d399;
+  color: #064e3b;
+}
+
+.verdict-box.failed {
+  background-color: #fee2e2;
+  border: 2px solid #f87171;
+  color: #b91c1c;
+}
+
+.test-case-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.test-case {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+}
+
+.test-case.failed {
+  background-color: #f87171;
+}
+
+.test-case.passed {
+  background-color: #34d399;
+}
+
+.error-box {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  background-color: #fee2e2;
+  color: #b91c1c;
+  white-space: "pre-wrap";
+}

@@ -3,15 +3,12 @@ import mongoose from "mongoose";
 const testCasesSchema = new mongoose.Schema({
   input: {
     type: String,
-    required: true,
   },
   output: {
     type: String,
-    required: true,
   },
   linesPerCase: {
     type: Number,
-    required: true,
   },
   problemId: {
     type: String,

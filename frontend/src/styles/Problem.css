@@ -1,0 +1,150 @@
+
+.problem-editor-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .problem-editor-container {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
+
+.problem-left-section,
+.problem-right-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.problem-left-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.problem-right-section {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .problem-left-section {
+    width: 60%;
+  }
+  .problem-right-section {
+    width: 40%;
+  }
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+  margin-bottom: 1rem;
+}
+
+/* Difficulty select styling */
+.difficulty-select {
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  width: 40%;
+  max-width: 100px;
+  margin-left: 10px;
+  color: #1f2937;
+  outline: none;
+}
+
+.difficulty-select:focus {
+  border-color: #d1d5db;
+  box-shadow: none;
+}
+
+/* Title and input fields */
+.problem-title {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.problem-name-input,
+.problem-description-input,
+.input-textarea,
+.output-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  resize: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: "Fira code", "Fira Mono", monospace;
+}
+
+.problem-name-input {
+  height: 60px;
+}
+
+.problem-description-input {
+  height: 400px;
+}
+
+.input-textarea,
+.output-textarea {
+  height: 180px;
+}
+
+.problem-name-input:focus,
+.problem-description-input:focus,
+.input-textarea:focus,
+.output-textarea:focus {
+  border-color: #d1d5db;
+  box-shadow: none;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 0;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-button:disabled {
+  background-color: #93c5fd;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.submit-button:disabled:hover {
+  background-color: #93c5fd;
+}

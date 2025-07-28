@@ -1,0 +1,205 @@
+/* Main container for the Solve page */
+.solve-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .solve-container {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
+
+/* Problem section styles */
+.solve-problem-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.solve-problem-title {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.solve-problem-description {
+  font-size: 1.125rem;
+  color: #4b5563;
+  max-height: 500px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.solve-difficulty-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.25rem 1rem;
+  background-color: #bfdbfe;
+  color: #1e40af;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  user-select: none;
+}
+
+/* Code section styles */
+.solve-code-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .solve-problem-section,
+  .solve-code-section {
+    width: 50%;
+    margin-bottom: 0;
+  }
+}
+
+/* Code header styles */
+.solve-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.solve-code-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Language select styles */
+.solve-language-select-wrapper {
+  margin: 0;
+}
+
+.solve-language-select {
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.solve-language-select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+/* Code editor styles */
+.solve-code-editor {
+  width: 100%;
+  height: 20rem;
+  padding: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  resize: none;
+  outline: none;
+  font-size: 15px;
+  font-family: "Fira code", "Fira Mono", monospace;
+  overflow-y: auto;
+}
+
+.solve-code-editor:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.solve-code-editor:disabled {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  resize: none;
+}
+
+/* Submit button styles */
+.solve-submit-button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 0;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.solve-submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.solve-submit-button:disabled {
+  background-color: #93c5fd;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+  transition: none;
+}
+
+.solve-submit-button:disabled:hover {
+  background-color: #93c5fd;
+}
+
+/* Error handling */
+.solve-error-container,
+.solve-loading-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.solve-error-box {
+  background-color: #ef4444;
+  color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Login message */
+.solve-login-message {
+  color: #dc2626;
+  font-weight: 600;
+  margin: 0.5rem 0 1rem 0;
+  font-size: 1rem;
+}
+
+.solve-login-message a {
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.solve-login-message a:hover {
+  color: #1d4ed8;
+}
+
+/* Verdict wrapper */
+.solve-verdict-wrapper {
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
