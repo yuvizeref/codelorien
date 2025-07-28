@@ -27,7 +27,7 @@ export const evaluateSubmission = async (submission) => {
     .catch(async (err) => {
       await updateSubmission(submission.id, {
         status: "failed",
-        error: err.stderr,
+        error: err.message,
         evaluated: true,
       });
     });

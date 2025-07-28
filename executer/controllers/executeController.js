@@ -1,7 +1,6 @@
 import { runCode } from "../utils/compilerUtils.js";
 
 export const executeRoute = async (req, res) => {
-  console.log(req.body);
   try {
     const result = await runCode(
       req.body.code,
