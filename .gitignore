@@ -27,3 +27,7 @@
 /frontend/*.njsproj
 /frontend/*.sln
 /frontend/*.sw?
+
+/executer/staging
+/executer/node_modules
+/executer/.env
