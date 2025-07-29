@@ -148,3 +148,34 @@
 .submit-button:disabled:hover {
   background-color: #93c5fd;
 }
+
+.lines-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: "Fira Code", "Fira Mono", monospace;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.lines-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+.lines-input::-webkit-outer-spin-button,
+.lines-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.lines-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.lines-input:focus::placeholder {
+  color: transparent; /* Hide placeholder on focus */
+}

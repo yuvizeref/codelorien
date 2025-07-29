@@ -30,8 +30,8 @@ export const addTestCases = async (
   const testCase = await TestCases.findOne({ problemId: problemId });
 
   if (testCase) {
-    deleteFileFromStorage(testCase.input);
-    deleteFileFromStorage(testCase.output);
+    if (testCase.input) deleteFileFromStorage(testCase.input);
+    if (testCase.output) deleteFileFromStorage(testCase.output);
 
     testCase.input = inputFilePath;
     testCase.output = outputFilePath;

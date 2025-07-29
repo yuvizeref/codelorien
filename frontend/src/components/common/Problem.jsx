@@ -1,31 +1,44 @@
 import { useState } from "react";
-import "../../styles/Problem.css";
+import { useNavigate } from "react-router-dom";
 import { addProblem } from "../../utils/problemUtils";
+import { addTestCases } from "../../utils/testCasesUtils";
+import "../../styles/Problem.css";
 
 const Problem = ({
   prevName,
   prevDescription,
   prevInput,
   prevOutput,
+  prevLinesPerCase,
   prevDifficulty,
 }) => {
+  const navigate = useNavigate();
+
   const [problemName, setProblemName] = useState(prevName);
   const [problemDescription, setProblemDescription] = useState(prevDescription);
   const [input, setInput] = useState(prevInput);
   const [output, setOutput] = useState(prevOutput);
   const [difficulty, setDifficulty] = useState(prevDifficulty ?? "Easy");
+  const [linesPerCase, setLinesPerCase] = useState(prevLinesPerCase ?? 0);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
+    if (!problemName || !problemDescription) {
+      setError("Problem name and description are mandatory.");
+      return;
+    }
     try {
-      if (!difficulty) setDifficulty("Easy");
       const problem = await addProblem(
         problemName,
         problemDescription,
         difficulty
       );
-      console.log(problem);
+
+      await addTestCases(problem._id, input, output, linesPerCase);
+
+      navigate(`/solve/${problem._id}`);
     } catch (err) {
-      console.log(err.message);
+      setError(err.message);
     }
   };
 
@@ -86,8 +99,17 @@ const Problem = ({
               className="output-textarea"
             />
           </div>
+          <div className="form-group">
+            <label>Output Lines per test case</label>
+            <input
+              type="number"
+              className="lines-input"
+              value={linesPerCase}
+              onChange={(e) => setLinesPerCase(e.target.value)}
+            />
+          </div>
         </div>
-
+        {error && <div className="error-message">{error}</div>}
         <button className="submit-button" onClick={handleSubmit}>
           Submit
         </button>

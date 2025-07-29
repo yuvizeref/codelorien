@@ -1,4 +1,4 @@
-/* Main container for the Solve page */
+
 .solve-container {
   min-height: 100vh;
   background-color: #f9fafb;
@@ -62,6 +62,7 @@
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 @media (min-width: 1024px) {
@@ -135,7 +136,11 @@
   resize: none;
 }
 
-/* Submit button styles */
+.solve-button-container {
+  display: flex;
+  gap: 10px;
+}
+
 .solve-submit-button {
   width: 100%;
   margin-top: 1rem;
@@ -164,7 +169,6 @@
   background-color: #93c5fd;
 }
 
-/* Error handling */
 .solve-error-container,
 .solve-loading-container {
   min-height: 100vh;
@@ -198,8 +202,79 @@
   color: #1d4ed8;
 }
 
-/* Verdict wrapper */
-.solve-verdict-wrapper {
-  flex-grow: 1;
-  margin-bottom: 1.5rem;
+/* Tab Navigation */
+.solve-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.solve-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+  border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+}
+
+.solve-tab:hover {
+  background-color: #ddd;
+}
+
+.solve-tab.active {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.solve-tab-content {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+}
+
+.solve-tab-content textarea {
+  width: 100%;
+  height: 200px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #d1d5db;
+  resize: none;
+  font-size: 1rem;
+}
+
+.solve-tab-content textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.solve-tab-content .solve-result {
+  font-size: 1.125rem;
+  color: #4b5563;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .solve-tabs {
+    flex-direction: column;
+  }
+  .solve-tab {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.solve-result-div {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #4b5563;
+  max-height: 300px;
+  overflow-y: auto;
 }

@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import {
   addSubmissionRoute,
   deleteSubmissionRoute,
@@ -14,10 +13,6 @@ import {
 } from "../middleware/authenticate.js";
 
 const submissionRouter = express.Router();
-
-const storage = multer.memoryStorage();
-
-const upload = multer({ storage });
 
 submissionRouter.get(
   "/:id",

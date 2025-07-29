@@ -1,11 +1,9 @@
 import { body, validationResult } from "express-validator";
 
 export const validateFiles = [
-  body("output").notEmpty().withMessage("Output is required"),
-  body("input").isString().withMessage("Input must be a string"),
-  body("linesPerCase")
-    .isInt({ min: 1 })
-    .withMessage("linesPerCase must be a non-negative integer"),
+  body("output").exists().withMessage("Output is required"),
+  body("input").exists().withMessage("Input is required"),
+  body("linesPerCase").exists().withMessage("linesPerCase is required"),
 ];
 
 export const validateTestCases = (req, res, next) => {

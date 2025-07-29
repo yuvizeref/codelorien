@@ -10,6 +10,7 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "../../styles/Solve.css";
+import { runCode } from "../../utils/runUtils";
 
 const availableLanguages = ["cpp", "python", "java"];
 
@@ -24,6 +25,22 @@ const Solve = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(
     availableLanguages[0]
   );
+  const [activeTab, setActiveTab] = useState("custom-input");
+  const [customInput, setCustomInput] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleRun = async () => {
+    setSubmitting(true);
+    try {
+      const result = runCode(code, customInput, selectedLanguage);
+      setResult(result);
+    } catch (err) {
+      setActiveTab(err.message);
+    } finally {
+      setSubmitting(false);
+      setActiveTab("result");
+    }
+  };
 
   const handleSubmit = async () => {
     setSubmissionId(null);
@@ -31,7 +48,10 @@ const Solve = () => {
     try {
       const submission = await submitCode(problemId, code, selectedLanguage);
       const judgeSubmitted = await judgeSubmission(submission._id);
-      if (judgeSubmitted) setSubmissionId(submission._id);
+      if (judgeSubmitted) {
+        setSubmissionId(submission._id);
+        setActiveTab("verdict");
+      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -53,6 +73,33 @@ const Solve = () => {
 
     fetchProblem();
   }, [problemId]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "custom-input":
+        return (
+          <textarea
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
+            placeholder="Enter custom input here"
+          />
+        );
+      case "result":
+        return <div className="solve-result-div">{result}</div>;
+      case "verdict":
+        return submissionId ? (
+          <Verdict submissionId={submissionId} />
+        ) : (
+          <p>You must submit first.</p>
+        );
+      default:
+        return null;
+    }
+  };
 
   if (error) {
     return (
@@ -115,19 +162,48 @@ const Solve = () => {
           </p>
         )}
 
-        {submissionId && (
-          <div className="solve-verdict-wrapper">
-            <Verdict submissionId={submissionId} />
+        <div className="solve-tabs">
+          <div
+            className={`solve-tab ${
+              activeTab === "custom-input" ? "active" : ""
+            }`}
+            onClick={() => handleTabClick("custom-input")}
+          >
+            Custom Input
           </div>
-        )}
+          <div
+            className={`solve-tab ${activeTab === "result" ? "active" : ""}`}
+            onClick={() => handleTabClick("result")}
+          >
+            Result
+          </div>
+          <div
+            className={`solve-tab ${activeTab === "verdict" ? "active" : ""}`}
+            onClick={() => handleTabClick("verdict")}
+          >
+            Verdict
+          </div>
+        </div>
 
-        <button
-          className="solve-submit-button"
-          disabled={!loggedIn || submitting}
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+        <div className="solve-tab-content">{renderTabContent()}</div>
+
+        <div className="solve-button-container">
+          <button
+            className="solve-submit-button"
+            disabled={!loggedIn || submitting}
+            onClick={handleRun}
+          >
+            Run
+          </button>
+
+          <button
+            className="solve-submit-button"
+            disabled={!loggedIn || submitting}
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );

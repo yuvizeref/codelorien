@@ -1,17 +1,27 @@
 import axios from "axios";
 
-const problemsURL = "http://localhost:8000/api/problems";
+const testCasesURL = "http://localhost:8000/api/testcases";
 
-export const getProblems = async () => {
-  const response = await axios.get(problemsURL);
-  if (response.status === 200) {
-    return await response.data.problems;
-  }
-};
+export const addTestCases = async (problemId, input, output, linesPerCase) => {
+  const token = localStorage.getItem("token");
 
-export const getProblemById = async (problemId) => {
-  const response = await axios.get(`${problemsURL}/${problemId}`);
-  if (response.status === 200) {
-    return await response.data.problem;
+  if (!token) throw new Error("User not logged in");
+
+  const response = await axios.post(
+    `${testCasesURL}/${problemId}`,
+    {
+      input: input ?? " ",
+      output: output ?? " ",
+      linesPerCase: linesPerCase,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (response.status === 200 || response.status === 201) {
+    return await response.data.testCase;
   }
 };

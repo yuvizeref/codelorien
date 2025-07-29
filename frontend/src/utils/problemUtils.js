@@ -34,7 +34,7 @@ export const addProblem = async (name, description, difficulty) => {
       },
     }
   );
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201) {
     return await response.data.problem;
   }
 };
