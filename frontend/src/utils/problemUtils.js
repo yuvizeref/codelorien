@@ -16,6 +16,22 @@ export const getProblemById = async (problemId) => {
   }
 };
 
+export const deleteProblemById = async (problemId) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) throw new Error("User not logged in");
+
+  const response = await axios.delete(`${problemsURL}/${problemId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 200) {
+    return await response.data.message;
+  }
+};
+
 export const addProblem = async (name, description, difficulty) => {
   const token = localStorage.getItem("token");
 
@@ -23,6 +39,34 @@ export const addProblem = async (name, description, difficulty) => {
 
   const response = await axios.post(
     problemsURL,
+    {
+      name: name,
+      description: description,
+      difficulty: difficulty,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (response.status === 200 || response.status === 201) {
+    return await response.data.problem;
+  }
+};
+
+export const updateProblem = async (
+  problemId,
+  name,
+  description,
+  difficulty
+) => {
+  const token = localStorage.getItem("token");
+
+  if (!token) throw new Error("User not logged in");
+
+  const response = await axios.patch(
+    `${problemsURL}/${problemId}`,
     {
       name: name,
       description: description,

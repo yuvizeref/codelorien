@@ -1,9 +1,8 @@
-/* Page container */
 .problems-page {
   min-height: 100vh;
-  width: 100vw;          /* full viewport width */
-  background-color: #f9fafb; /* bg-gray-50 */
-  padding: 2rem;         /* p-8 */
+  width: 100vw;
+  background-color: #f9fafb;
+  padding: 2rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -19,16 +18,14 @@
   overflow-y: auto;
 }
 
-/* Title */
 .problems-title {
-  font-size: 1.875rem; /* text-3xl */
+  font-size: 1.875rem;
   font-weight: 700;
   text-align: center;
-  color: #1f2937; /* text-gray-800 */
+  color: #1f2937;
   margin-bottom: 1.5rem;
 }
 
-/* Problems list container */
 .problems-list {
   display: flex;
   flex-direction: column;
@@ -37,58 +34,16 @@
   overflow-y: auto;
 }
 
-/* No problems text */
 .no-problems {
   text-align: center;
-  font-size: 1.125rem; /* text-lg */
-  color: #4b5563; /* text-gray-600 */
+  font-size: 1.125rem;
+  color: #4b5563;
 }
 
-/* Problem card */
-.problem-card {
-  border: 1px solid #d1d5db; /* border-gray-300 */
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease;
-  cursor: pointer;
-}
-
-.problem-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Problem name */
-.problem-card-name {
-  font-size: 1.5rem; /* text-2xl */
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-}
-
-/* Metadata container */
-.problem-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.875rem; /* text-sm */
-  color: #6b7280; /* text-gray-500 */
-}
-
-/* Difficulty tag */
-.difficulty-tag {
-  background-color: #bfdbfe; /* bg-blue-200 */
-  color: #1e40af; /* text-blue-800 */
-  padding: 0.25rem 1rem;
-  border-radius: 9999px; /* rounded-full */
-  font-weight: 500;
-}
-
-/* Loading & Error Containers (full screen center) */
 .loading-container,
 .error-container {
   min-height: 100vh;
-  background-color: #f9fafb; /* bg-gray-50 */
+  background-color: #f9fafb;
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -96,7 +51,6 @@
   width: 100%;
 }
 
-/* Loading box */
 .loading-box {
   background-color: white;
   padding: 2rem;
@@ -107,16 +61,15 @@
 }
 
 .loading-title {
-  font-size: 1.25rem; /* text-xl */
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937; /* text-gray-800 */
+  color: #1f2937;
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-/* Error box */
 .error-box {
-  background-color: #ef4444; /* bg-red-500 */
+  background-color: #ef4444;
   color: white;
   padding: 2rem;
   border-radius: 0.5rem;
@@ -126,12 +79,11 @@
 }
 
 .error-title {
-  font-size: 1.25rem; /* text-xl */
+  font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
-/* Add problem button */
 .add-button {
   width: 100%;
   margin-top: 1rem;
@@ -159,10 +111,9 @@
   background-color: #93c5fd;
 }
 
-/* Media Query for larger screens */
 @media (min-width: 1024px) {
   .problems-list {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem; /* Adjust gap on larger screens */
+    gap: 1.5rem;
   }
 }

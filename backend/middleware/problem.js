@@ -10,6 +10,10 @@ export const problemAddValidations = [
 ];
 
 export const validateProblemAdd = (req, res, next) => {
+  if (!req.query.purge) {
+    req.query.purge = true;
+  }
+
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {

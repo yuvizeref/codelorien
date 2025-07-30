@@ -23,13 +23,8 @@ export const runCode = async (code, input, language) => {
       }
     );
 
-    if (response.status === 200) {
-      return response.data.result;
-    } else {
-      throw new Error("Run failed");
-    }
-  } catch (error) {
-    console.error("Submit error:", error.message);
-    throw error;
+    return response.data.result;
+  } catch (err) {
+    throw new Error(err.response.data.error);
   }
 };

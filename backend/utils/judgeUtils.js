@@ -18,9 +18,8 @@ export const runSubmission = async (submissionId) => {
 export const evaluateSubmission = async (submission) => {
   const code = getFileFromStorage(submission.code);
   const testCases = await getTestCases(submission.problemId);
-  const input = getFileFromStorage(testCases.input);
 
-  runCode(code, input, submission.language)
+  runCode(code, testCases.input, submission.language)
     .then((output) => {
       judgeResult(submission.id, output);
     })
@@ -38,11 +37,9 @@ const judgeResult = async (submissionId, output) => {
     const submission = await getSubmission(submissionId);
     const testCases = await getTestCases(submission.problemId);
 
-    const expectedOutput = getFileFromStorage(testCases.output);
-
     const { passed, failed } = compareOutputs(
       output,
-      expectedOutput,
+      testCases.output,
       testCases.linesPerCase
     );
 

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Problem from "../models/problemModel.js";
 import TestCases from "../models/testCasesModel.js";
+import { deleteTestCases } from "./testCasesUtils.js";
+import { deleteSubmissionsByProblemId } from "./submissionUtils.js";
 
 export const getProblems = async (showDeleted = false) => {
   if (showDeleted) return await Problem.find();
@@ -55,17 +57,23 @@ export const updateProblem = async (id, updateData, user) => {
   });
 };
 
-export const deleteProblem = async (id, user, purge = false) => {
+export const deleteProblem = async (id, user, purge = "true") => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid problem ID");
   }
-  if (purge) {
-    return await Problem.findByIdAndDelete(id);
-  } else {
-    return await Problem.findByIdAndUpdate(
-      id,
-      { deleted: true, modifiedBy: user, modified: new Date() },
-      { new: true }
-    );
+  try {
+    if (purge === "true") {
+      deleteTestCases(id);
+      deleteSubmissionsByProblemId(id);
+      return await Problem.findByIdAndDelete(id);
+    } else {
+      return await Problem.findByIdAndUpdate(
+        id,
+        { deleted: true, modifiedBy: user, modified: new Date() },
+        { new: true }
+      );
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

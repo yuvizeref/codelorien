@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProblems } from "../../utils/problemUtils";
 import "../../styles/Problems.css";
+import ProblemCard from "./ProblemCard";
 
 const Problems = () => {
   const navigate = useNavigate();
@@ -55,17 +56,7 @@ const Problems = () => {
             <p className="no-problems">No problems available.</p>
           ) : (
             problems.map((problem) => (
-              <div
-                key={problem._id}
-                className="problem-card"
-                onClick={() => navigate(`/solve/${problem._id}`)}
-                style={{ cursor: "pointer" }}
-              >
-                <h2 className="problem-card-name">{problem.name}</h2>
-                <div className="problem-meta">
-                  <span className="difficulty-tag">{problem.difficulty}</span>
-                </div>
-              </div>
+              <ProblemCard key={problem._id} problem={problem} />
             ))
           )}
         </div>

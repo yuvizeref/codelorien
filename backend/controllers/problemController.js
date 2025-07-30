@@ -47,7 +47,7 @@ export const updateProblemRoute = async (req, res) => {
       return res.status(404).json({ error: "Problem not found" });
     }
 
-    res.status(200).json(updatedProblem);
+    res.status(200).json({ problem: updatedProblem });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -55,9 +55,11 @@ export const updateProblemRoute = async (req, res) => {
 
 export const deleteProblemRoute = async (req, res) => {
   const { id } = req.params;
-  const { purge } = req.query;
+
+  const purge = req.query.purge ? req.query.purge : "true";
+
   try {
-    const deleted = await deleteProblem(id, purge === "true");
+    const deleted = await deleteProblem(id, purge);
 
     if (!deleted) {
       return res.status(404).json({ error: "Problem not found" });
@@ -65,7 +67,9 @@ export const deleteProblemRoute = async (req, res) => {
 
     return res.status(200).json({
       message:
-        purge === "true" ? "User permanently deleted" : "User soft-deleted",
+        purge === "true"
+          ? "Problem permanently deleted"
+          : "Problem soft-deleted",
     });
   } catch (err) {
     return res.status(400).json({ error: err.message });

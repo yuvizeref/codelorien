@@ -84,3 +84,23 @@ export const updateSubmission = async (submissionId, updateData) => {
     throw err;
   }
 };
+
+export const deleteSubmissionsByProblemId = async (problemId) => {
+  if (!mongoose.Types.ObjectId.isValid(problemId)) {
+    throw new Error("Invalid problem ID");
+  }
+
+  try {
+    const submissions = await Submission.find({ problemId });
+
+    if (submissions.length > 0) {
+      submissions.forEach((submission) => {
+        deleteFileFromStorage(submission.code);
+      });
+
+      return await Submission.deleteMany({ problemId });
+    }
+  } catch (err) {
+    throw err;
+  }
+};

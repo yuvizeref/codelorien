@@ -1,25 +1,24 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { addProblem } from "../../utils/problemUtils";
-import { addTestCases } from "../../utils/testCasesUtils";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  addProblem,
+  getProblemById,
+  updateProblem,
+} from "../../utils/problemUtils";
+import { addTestCases, getTestCases } from "../../utils/testCasesUtils";
 import "../../styles/Problem.css";
 
-const Problem = ({
-  prevName,
-  prevDescription,
-  prevInput,
-  prevOutput,
-  prevLinesPerCase,
-  prevDifficulty,
-}) => {
+const Problem = () => {
   const navigate = useNavigate();
 
-  const [problemName, setProblemName] = useState(prevName);
-  const [problemDescription, setProblemDescription] = useState(prevDescription);
-  const [input, setInput] = useState(prevInput);
-  const [output, setOutput] = useState(prevOutput);
-  const [difficulty, setDifficulty] = useState(prevDifficulty ?? "Easy");
-  const [linesPerCase, setLinesPerCase] = useState(prevLinesPerCase ?? 0);
+  const { problemId } = useParams();
+
+  const [problemName, setProblemName] = useState("");
+  const [problemDescription, setProblemDescription] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [difficulty, setDifficulty] = useState("Easy");
+  const [linesPerCase, setLinesPerCase] = useState(0);
   const [error, setError] = useState(null);
 
   const handleSubmit = async () => {
@@ -28,11 +27,17 @@ const Problem = ({
       return;
     }
     try {
-      const problem = await addProblem(
-        problemName,
-        problemDescription,
-        difficulty
-      );
+      let problem;
+      if (problemId) {
+        problem = await updateProblem(
+          problemId,
+          problemName,
+          problemDescription,
+          difficulty
+        );
+      } else {
+        problem = await addProblem(problemName, problemDescription, difficulty);
+      }
 
       await addTestCases(problem._id, input, output, linesPerCase);
 
@@ -41,6 +46,28 @@ const Problem = ({
       setError(err.message);
     }
   };
+
+  useEffect(() => {
+    const getProblemDetails = async () => {
+      try {
+        const problem = await getProblemById(problemId);
+        if (problem) {
+          setProblemName(problem.name);
+          setProblemDescription(problem.description);
+          setDifficulty(problem.difficulty);
+        }
+        const testCase = await getTestCases(problemId);
+        if (testCase) {
+          setInput(testCase.input);
+          setOutput(testCase.output);
+          setLinesPerCase(testCase.linesPerCase);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (problemId) getProblemDetails();
+  }, [problemId]);
 
   return (
     <div className="problem-editor-container">

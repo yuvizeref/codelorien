@@ -7,12 +7,12 @@ import { judgeSubmission } from "../../utils/judgeUtils";
 import Verdict from "./Verdict";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
+import { runCode } from "../../utils/runUtils";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "../../styles/Solve.css";
-import { runCode } from "../../utils/runUtils";
 
-const availableLanguages = ["cpp", "python", "java"];
+const availableLanguages = ["cpp"];
 
 const Solve = () => {
   const { problemId } = useParams();
@@ -32,10 +32,10 @@ const Solve = () => {
   const handleRun = async () => {
     setSubmitting(true);
     try {
-      const result = runCode(code, customInput, selectedLanguage);
+      const result = await runCode(code, customInput, selectedLanguage);
       setResult(result);
     } catch (err) {
-      setActiveTab(err.message);
+      setResult(err.message);
     } finally {
       setSubmitting(false);
       setActiveTab("result");
