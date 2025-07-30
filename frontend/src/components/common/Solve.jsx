@@ -1,26 +1,25 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import MonacoEditor from "@monaco-editor/react";
 import { getProblemById } from "../../utils/problemUtils";
 import { submitCode } from "../../utils/submissionUtils";
 import { judgeSubmission } from "../../utils/judgeUtils";
 import Verdict from "./Verdict";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
 import { runCode } from "../../utils/runUtils";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
 import "../../styles/Solve.css";
 
 const availableLanguages = ["cpp"];
 
 const Solve = () => {
   const { problemId } = useParams();
+
+  const { loggedIn } = useSelector((state) => state.auth);
+
   const [problem, setProblem] = useState(null);
   const [error, setError] = useState(null);
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { loggedIn } = useSelector((state) => state.auth);
   const [submissionId, setSubmissionId] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState(
     availableLanguages[0]
@@ -76,6 +75,10 @@ const Solve = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleEditorChange = (value) => {
+    setCode(value);
   };
 
   const renderTabContent = () => {
@@ -144,14 +147,30 @@ const Solve = () => {
             </select>
           </div>
         </div>
-        <Editor
-          value={code}
-          onValueChange={setCode}
-          padding={15}
-          highlight={(code) => highlight(code, languages.js)}
-          className="solve-code-editor"
-          disabled={!loggedIn}
-        />
+        <div className="solve-editor-container">
+          <MonacoEditor
+            height="400px"
+            language="cpp"
+            value={code}
+            onChange={handleEditorChange}
+            theme="vs"
+            options={{
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              lineNumbers: "off",
+              fontSize: 14,
+              fontFamily: "Fira Code, Fira Mono, monospace",
+              automaticLayout: true,
+              renderLineHighlight: "none",
+              renderIndentGuides: false,
+              scrollbar: {
+                vertical: "hidden",
+                horizontal: "hidden",
+              },
+            }}
+          />
+        </div>
+
         {!loggedIn && (
           <p className="solve-login-message">
             You need to{" "}

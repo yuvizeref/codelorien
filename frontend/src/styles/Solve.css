@@ -14,7 +14,6 @@
   }
 }
 
-/* Problem section styles */
 .solve-problem-section {
   background-color: white;
   padding: 1.5rem;
@@ -53,7 +52,6 @@
   user-select: none;
 }
 
-/* Code section styles */
 .solve-code-section {
   background-color: white;
   padding: 1.5rem;
@@ -63,6 +61,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: auto;
+  flex: 1;
 }
 
 @media (min-width: 1024px) {
@@ -73,7 +73,6 @@
   }
 }
 
-/* Code header styles */
 .solve-code-header {
   display: flex;
   justify-content: space-between;
@@ -88,7 +87,6 @@
   margin: 0;
 }
 
-/* Language select styles */
 .solve-language-select-wrapper {
   margin: 0;
 }
@@ -109,31 +107,20 @@
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
 }
 
-/* Code editor styles */
-.solve-code-editor {
-  width: 100%;
-  height: 20rem;
-  padding: 1rem;
-  border: 2px solid #d1d5db;
+.solve-editor-container {
+  flex-grow: 1;
+  margin-bottom: 1rem;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  background-color: #b1b5bf;
   border-radius: 0.5rem;
-  resize: none;
-  outline: none;
-  font-size: 15px;
-  font-family: "Fira code", "Fira Mono", monospace;
-  overflow-y: auto;
 }
 
-.solve-code-editor:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-}
-
-.solve-code-editor:disabled {
-  background-color: #f3f4f6;
-  border-color: #d1d5db;
-  color: #9ca3af;
-  cursor: not-allowed;
-  resize: none;
+.monaco-editor {
+  border-radius: 2px;
+  height: 100%;
+  margin: 0;
 }
 
 .solve-button-container {
@@ -184,7 +171,6 @@
   border-radius: 0.5rem;
 }
 
-/* Login message */
 .solve-login-message {
   color: #dc2626;
   font-weight: 600;
@@ -202,7 +188,6 @@
   color: #1d4ed8;
 }
 
-/* Tab Navigation */
 .solve-tabs {
   display: flex;
   margin-bottom: 20px;
@@ -214,8 +199,9 @@
   cursor: pointer;
   font-weight: bold;
   background-color: #f5f5f5;
-  transition: background-color 0.3s ease;
-  border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+  border-radius: 0.5rem 0.5rem 0 0;
+  border: 2px solid #ddd;
+  margin-right: 5px;
 }
 
 .solve-tab:hover {
@@ -227,6 +213,7 @@
   color: white;
   border-color: #2563eb;
 }
+
 
 .solve-tab-content {
   padding: 20px;
