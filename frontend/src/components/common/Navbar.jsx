@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../utils/authUtils";
-import { FiUser } from "react-icons/fi"; // import icon here
+import { FiUser } from "react-icons/fi";
 import "../../styles/Navbar.css";
 
 const Navbar = () => {

@@ -1,0 +1,138 @@
+.submissions-page {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f9fafb;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.submissions-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.submissions-left-container {
+  flex: 0 0 30%;
+  padding-right: 1rem;
+}
+
+.submissions-right-container {
+  flex: 0 0 70%;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.submission-card {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05), -4px 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), -6px 0 15px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.submission-status {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.submission-status.passed {
+  color: #10b981;
+}
+
+.submission-status.failed {
+  color: #ef4444;
+}
+
+.submission-date {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.submission-date span {
+  color: #2563eb;
+}
+
+.no-submissions {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #4b5563;
+}
+
+.submissions-result {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.submissions-error-box {
+  background-color: #fef2f2;
+  color: #f87171;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  white-space: "pre-wrap";
+}
+
+.submissions-result-count {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #4b5563;
+  background-color: #e5e7eb;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .submissions-container {
+    gap: 3rem;
+  }
+
+  .submissions-left-container {
+    padding-right: 1.5rem;
+  }
+
+  .submissions-right-container {
+    padding-left: 1.5rem;
+  }
+
+  .submissions-list {
+    max-height: 70vh;
+  }
+}

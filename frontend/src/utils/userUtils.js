@@ -1,9 +1,7 @@
-import axios from "axios";
-
-const userURL = "http://localhost:8000/api/users";
+import axiosInstance from "../middleware/axiosInstance";
 
 export const registerUser = async (username, email, fullName, password) => {
-  const response = await axios.post(userURL, {
+  const response = await axiosInstance.post("/users", {
     username: username,
     email: email,
     fullName: fullName,

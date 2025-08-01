@@ -1,31 +1,21 @@
-import axios from "axios";
-
-const problemsURL = "http://localhost:8000/api/problems";
+import axiosInstance from "../middleware/axiosInstance";
 
 export const getProblems = async () => {
-  const response = await axios.get(problemsURL);
+  const response = await axiosInstance.get("/problems");
   if (response.status === 200) {
     return await response.data.problems;
   }
 };
 
 export const getProblemById = async (problemId) => {
-  const response = await axios.get(`${problemsURL}/${problemId}`);
+  const response = await axiosInstance.get(`/problems/${problemId}`);
   if (response.status === 200) {
     return await response.data.problem;
   }
 };
 
 export const deleteProblemById = async (problemId) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) throw new Error("User not logged in");
-
-  const response = await axios.delete(`${problemsURL}/${problemId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axiosInstance.delete(`/problems/${problemId}`);
 
   if (response.status === 200) {
     return await response.data.message;
@@ -33,23 +23,11 @@ export const deleteProblemById = async (problemId) => {
 };
 
 export const addProblem = async (name, description, difficulty) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) throw new Error("User not logged in");
-
-  const response = await axios.post(
-    problemsURL,
-    {
-      name: name,
-      description: description,
-      difficulty: difficulty,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axiosInstance.post("/problems", {
+    name: name,
+    description: description,
+    difficulty: difficulty,
+  });
   if (response.status === 200 || response.status === 201) {
     return await response.data.problem;
   }
@@ -61,23 +39,12 @@ export const updateProblem = async (
   description,
   difficulty
 ) => {
-  const token = localStorage.getItem("token");
+  const response = await axiosInstance.patch(`/problems/${problemId}`, {
+    name: name,
+    description: description,
+    difficulty: difficulty,
+  });
 
-  if (!token) throw new Error("User not logged in");
-
-  const response = await axios.patch(
-    `${problemsURL}/${problemId}`,
-    {
-      name: name,
-      description: description,
-      difficulty: difficulty,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
   if (response.status === 200 || response.status === 201) {
     return await response.data.problem;
   }

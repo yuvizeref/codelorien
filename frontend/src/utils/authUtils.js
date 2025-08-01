@@ -1,10 +1,8 @@
-import axios from "axios";
 import { setSession, clearSession } from "../redux/actions/authActions";
-
-const authURL = "http://localhost:8000/api/auth";
+import axiosInstance from "../middleware/axiosInstance";
 
 export const login = async (emailOrUsername, password, dispatch) => {
-  const response = await axios.post(`${authURL}/login`, {
+  const response = await axiosInstance.post("/auth/login", {
     emailOrUsername: emailOrUsername,
     password: password,
   });

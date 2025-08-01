@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import MonacoEditor from "@monaco-editor/react";
+import { Navigate, useParams } from "react-router-dom";
 import { getProblemById } from "../../utils/problemUtils";
 import { submitCode } from "../../utils/submissionUtils";
 import { judgeSubmission } from "../../utils/judgeUtils";
-import Verdict from "./Verdict";
 import { runCode } from "../../utils/runUtils";
+import Verdict from "./Verdict";
+import Editor from "./Editor";
 import "../../styles/Solve.css";
 
-const availableLanguages = ["cpp"];
+const languages = ["cpp"];
 
 const Solve = () => {
   const { problemId } = useParams();
@@ -21,9 +21,7 @@ const Solve = () => {
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submissionId, setSubmissionId] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    availableLanguages[0]
-  );
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
   const [activeTab, setActiveTab] = useState("custom-input");
   const [customInput, setCustomInput] = useState("");
   const [result, setResult] = useState("");
@@ -77,10 +75,6 @@ const Solve = () => {
     setActiveTab(tab);
   };
 
-  const handleEditorChange = (value) => {
-    setCode(value);
-  };
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "custom-input":
@@ -126,7 +120,15 @@ const Solve = () => {
     <div className="solve-container">
       <div className="solve-problem-section">
         <h2 className="solve-problem-title">{problem.name}</h2>
-        <div className="solve-difficulty-badge">{problem.difficulty}</div>
+        <div className="solve-metadata-section">
+          <div className="solve-difficulty-badge">{problem.difficulty}</div>
+          <button
+            className="solve-submissions-button"
+            onClick={() => window.open(`/submissions/${problemId}`, "_blank")}
+          >
+            Submissions
+          </button>
+        </div>
         <p className="solve-problem-description">{problem.description}</p>
       </div>
 
@@ -139,7 +141,7 @@ const Solve = () => {
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
             >
-              {availableLanguages.map((lang) => (
+              {languages.map((lang) => (
                 <option key={lang} value={lang}>
                   {lang}
                 </option>
@@ -147,29 +149,8 @@ const Solve = () => {
             </select>
           </div>
         </div>
-        <div className="solve-editor-container">
-          <MonacoEditor
-            height="400px"
-            language="cpp"
-            value={code}
-            onChange={handleEditorChange}
-            theme="vs"
-            options={{
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              lineNumbers: "off",
-              fontSize: 14,
-              fontFamily: "Fira Code, Fira Mono, monospace",
-              automaticLayout: true,
-              renderLineHighlight: "none",
-              renderIndentGuides: false,
-              scrollbar: {
-                vertical: "hidden",
-                horizontal: "hidden",
-              },
-            }}
-          />
-        </div>
+
+        <Editor code={code} setCode={setCode} language={selectedLanguage} />
 
         {!loggedIn && (
           <p className="solve-login-message">

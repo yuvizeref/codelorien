@@ -13,6 +13,7 @@ import Solve from "./components/common/Solve";
 import Navbar from "./components/common/Navbar";
 import "./App.css";
 import Problem from "./components/common/Problem";
+import Submissions from "./components/common/Submissions";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/problems/add" element={<Problem />} />
             <Route path="/problems/edit/:problemId" element={<Problem />} />
             <Route path="/solve/:problemId" element={<Solve />} />
+            <Route path="/submissions/:problemId" element={<Submissions />} />
             <Route
               path="/auth"
               element={loggedIn ? <Navigate to="/problems" /> : <Auth />}

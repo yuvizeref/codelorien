@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 import Submission from "../models/submissionModel.js";
 import { statuses } from "./enums.js";
-import { deleteFileFromStorage, uploadFileToStorage } from "./storage.js";
+import {
+  deleteFileFromStorage,
+  getFileFromStorage,
+  uploadFileToStorage,
+} from "./storage.js";
 
 export const getSubmissions = async (problemId, userId) => {
   if (!mongoose.Types.ObjectId.isValid(problemId)) {
@@ -11,10 +15,17 @@ export const getSubmissions = async (problemId, userId) => {
     throw new Error("Invalid user ID");
   }
 
-  return await Submission.find({
+  const submissions = await Submission.find({
     problemId: problemId,
     userId: userId,
-  });
+  }).lean();
+
+  const updatedSubmissions = submissions.map((submission) => ({
+    ...submission,
+    code: getFileFromStorage(submission.code),
+  }));
+
+  return updatedSubmissions;
 };
 
 export const getSubmission = async (id) => {
@@ -22,7 +33,11 @@ export const getSubmission = async (id) => {
     throw new Error("Invalid submission ID");
   }
 
-  return await Submission.findById(id);
+  const submission = await Submission.findById(id);
+
+  submission.code = getFileFromStorage(submission.code);
+
+  return submission;
 };
 
 export const addSubmission = async ({ problemId, code, language }, userId) => {

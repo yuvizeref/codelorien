@@ -1,0 +1,17 @@
+.editor-container {
+  flex-grow: 1;
+  margin-bottom: 1rem;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  background-color: #b1b5bf;
+  border-radius: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.monaco-editor {
+  border-radius: 2px;
+  height: 100%;
+  margin: 0;
+}

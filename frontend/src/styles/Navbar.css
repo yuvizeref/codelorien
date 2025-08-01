@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   height: 50px;
-  background-color: #60a5fa; /* lighter blue */
+  background-color: #60a5fa;
   display: flex;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -40,7 +40,6 @@
   list-style: none;
   display: flex;
   gap: 1.5rem;
-  /* no flex-grow, no justify-content */
 }
 
 .navbar-links li a {
@@ -51,10 +50,9 @@
 }
 
 .navbar-links li a:hover {
-  color: #93c5fd; /* lighter blue */
+  color: #93c5fd;
 }
 
-/* User icon container on the extreme right */
 .user-icon-container {
   position: relative;
   cursor: pointer;
@@ -71,7 +69,6 @@
   fill: none;
 }
 
-/* Dropdown menu styling */
 .dropdown-menu {
   position: absolute;
   right: 0;

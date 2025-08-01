@@ -1,18 +1,8 @@
-import axios from "axios";
-
-const judgeURL = "http://localhost:8000/api/judge";
+import axiosInstance from "../middleware/axiosInstance";
 
 export const judgeSubmission = async (submissionId) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) throw new Error("User not logged in");
-
   try {
-    const response = await axios.post(`${judgeURL}/${submissionId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstance.post(`/judge/${submissionId}`);
 
     if (response.status === 200) {
       return true;

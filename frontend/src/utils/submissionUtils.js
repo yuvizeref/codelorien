@@ -1,28 +1,17 @@
-import axios from "axios";
-
-const submissionsURL = "http://localhost:8000/api/submissions";
+import axiosInstance from "../middleware/axiosInstance";
 
 export const submitCode = async (problemId, code, language) => {
-  const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user || !token) throw new Error("User not logged in");
+  if (!user) throw new Error("User not logged in");
 
   try {
-    const response = await axios.post(
-      submissionsURL,
-      {
-        problemId,
-        userId: user._id,
-        code,
-        language,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axiosInstance.post("/submissions", {
+      problemId,
+      userId: user._id,
+      code,
+      language,
+    });
 
     if (response.status === 200) {
       return response.data.submission;
@@ -36,16 +25,23 @@ export const submitCode = async (problemId, code, language) => {
 };
 
 export const getSubmission = async (submissionId) => {
-  const token = localStorage.getItem("token");
+  const response = await axiosInstance.get(`/submissions/${submissionId}`);
 
-  if (!token) throw new Error("User not logged in");
-
-  const response = await axios.get(`${submissionsURL}/${submissionId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
   if (response.status === 200) {
     return await response.data.submission;
+  }
+};
+
+export const getSubmissions = async (problemId) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) throw new Error("User not logged in");
+
+  const response = await axiosInstance.get(
+    `/submissions/problem/${problemId}/user/${user._id}`
+  );
+
+  if (response.status === 200) {
+    return response.data.submissions;
   }
 };

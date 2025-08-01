@@ -175,7 +175,7 @@ const Register = ({ setLogin }) => {
             Already have an account?{" "}
             <span
               className="text-blue-600 cursor-pointer hover:underline"
-              onClick={() => setLogin(true)} // Toggle to Login screen
+              onClick={() => setLogin(true)}
             >
               Login
             </span>

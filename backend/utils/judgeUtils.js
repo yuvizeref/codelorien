@@ -16,10 +16,9 @@ export const runSubmission = async (submissionId) => {
 };
 
 export const evaluateSubmission = async (submission) => {
-  const code = getFileFromStorage(submission.code);
   const testCases = await getTestCases(submission.problemId);
 
-  runCode(code, testCases.input, submission.language)
+  runCode(submission.code, testCases.input, submission.language)
     .then((output) => {
       judgeResult(submission.id, output);
     })

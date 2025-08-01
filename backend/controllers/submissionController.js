@@ -6,7 +6,7 @@ import {
 } from "../utils/submissionUtils.js";
 
 export const getSubmissionsRoute = async (req, res) => {
-  const [problemId, userId] = req.params;
+  const { problemId, userId } = req.params;
   try {
     const submissions = await getSubmissions(problemId, userId);
     res.status(200).json({ submissions });
