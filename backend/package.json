@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/yuvizeref/codelorien#readme",
   "dependencies": {
+    "@google/genai": "^1.12.0",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

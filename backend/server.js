@@ -11,6 +11,7 @@ import { createAdminUser } from "./utils/userUtils.js";
 import judgeRouter from "./routes/judgeRoutes.js";
 import cors from "./middleware/corsConfig.js";
 import runRouter from "./routes/runRoutes.js";
+import aiRouter from "./routes/aiRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/testcases", testCasesRouter);
 app.use("/api/submissions", submissionRouter);
 app.use("/api/judge", judgeRouter);
 app.use("/api/run", runRouter);
+app.use("/api/code-assist", aiRouter);
 app.use("/api", docsRouter);
 
 await dbConnection();

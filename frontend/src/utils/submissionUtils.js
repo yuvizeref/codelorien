@@ -33,13 +33,7 @@ export const getSubmission = async (submissionId) => {
 };
 
 export const getSubmissions = async (problemId) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (!user) throw new Error("User not logged in");
-
-  const response = await axiosInstance.get(
-    `/submissions/problem/${problemId}/user/${user._id}`
-  );
+  const response = await axiosInstance.get(`/submissions/problem/${problemId}`);
 
   if (response.status === 200) {
     return response.data.submissions;

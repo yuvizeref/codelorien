@@ -22,7 +22,7 @@ submissionRouter.get(
 );
 
 submissionRouter.get(
-  "/problem/:problemId/user/:userId",
+  "/problem/:problemId",
   authenticate,
   authorizeSelfOrAdmin,
   getSubmissionsRoute

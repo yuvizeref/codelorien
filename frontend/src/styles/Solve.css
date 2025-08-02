@@ -270,3 +270,23 @@
   max-height: 300px;
   overflow-y: auto;
 }
+
+.solve-floating-icon {
+  position: fixed;
+  bottom: 50%;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.solve-floating-icon img {
+  width: 30px;
+  height: 30px;
+}

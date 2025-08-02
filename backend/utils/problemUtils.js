@@ -74,6 +74,6 @@ export const deleteProblem = async (id, user, purge = "true") => {
       );
     }
   } catch (err) {
-    console.log(err);
+    throw new Error("Error deleting problem.");
   }
 };

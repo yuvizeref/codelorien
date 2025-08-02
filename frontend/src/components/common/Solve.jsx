@@ -7,6 +7,7 @@ import { judgeSubmission } from "../../utils/judgeUtils";
 import { runCode } from "../../utils/runUtils";
 import Verdict from "./Verdict";
 import Editor from "./Editor";
+import AIModal from "./AIModal";
 import "../../styles/Solve.css";
 
 const languages = ["cpp"];
@@ -25,6 +26,7 @@ const Solve = () => {
   const [activeTab, setActiveTab] = useState("custom-input");
   const [customInput, setCustomInput] = useState("");
   const [result, setResult] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleRun = async () => {
     setSubmitting(true);
@@ -205,6 +207,22 @@ const Solve = () => {
           </button>
         </div>
       </div>
+
+      {submissionId && (
+        <div
+          className="solve-floating-icon"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <img src="/icons/lightbulb.png" alt="Help" />
+        </div>
+      )}
+
+      {isModalOpen && (
+        <AIModal
+          content={{ code: code, description: problem.description }}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
