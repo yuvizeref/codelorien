@@ -11,7 +11,6 @@ export const getReview = async (description, code) => {
       return response.data.review;
     }
   } catch (error) {
-    console.error("Code Assist Error:", error.message);
-    throw error;
+    throw new Error(error.response.data.error);
   }
 };

@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Editor from "./Editor";
 import { getSubmissions } from "../../utils/submissionUtils";
 import "../../styles/Submissions.css";
-import Editor from "./Editor";
 
 const Submissions = () => {
   const { problemId } = useParams();
   const [submissions, setSubmissions] = useState([]);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
+        setLoading(true);
         const submissions = await getSubmissions(problemId);
         setSubmissions(submissions);
       } catch (err) {
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -27,6 +31,16 @@ const Submissions = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString("en-US", options);
   };
+
+  if (loading) {
+    return (
+      <div className="submisions-loading-container">
+        <div className="submissions-loading-box">
+          <h2 className="submissions-loading-title">Loading submissions...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="submissions-page">

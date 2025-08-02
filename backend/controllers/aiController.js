@@ -6,7 +6,6 @@ export const getReviewRoute = async (req, res) => {
     const review = await getReview(description, code);
     res.status(200).json({ review });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ error: err.message });
   }
 };

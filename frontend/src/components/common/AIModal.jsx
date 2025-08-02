@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "../../styles/AIModal.css";
 import { useEffect } from "react";
 import { getReview } from "../../utils/aiUtils";
+import "../../styles/AIModal.css";
 
 const AIModal = ({ content, onClose }) => {
   const [review, setReview] = useState();
@@ -12,7 +12,7 @@ const AIModal = ({ content, onClose }) => {
         const result = await getReview(content.description, content.code);
         setReview(result);
       } catch (err) {
-        setReview(err);
+        setReview(err.message);
       }
     };
 

@@ -5,30 +5,15 @@ import {
   getSubmissionRoute,
   getSubmissionsRoute,
 } from "../controllers/submissionController.js";
-import {
-  authenticate,
-  authorizeAdmin,
-  authorizeSelf,
-  authorizeSelfOrAdmin,
-} from "../middleware/authenticate.js";
+import { authenticate, authorizeAdmin } from "../middleware/authenticate.js";
 
 const submissionRouter = express.Router();
 
-submissionRouter.get(
-  "/:id",
-  authenticate,
-  authorizeSelfOrAdmin,
-  getSubmissionRoute
-);
+submissionRouter.get("/:id", authenticate, getSubmissionRoute);
 
-submissionRouter.get(
-  "/problem/:problemId",
-  authenticate,
-  authorizeSelfOrAdmin,
-  getSubmissionsRoute
-);
+submissionRouter.get("/problem/:problemId", authenticate, getSubmissionsRoute);
 
-submissionRouter.post("/", authenticate, authorizeSelf, addSubmissionRoute);
+submissionRouter.post("/", authenticate, addSubmissionRoute);
 
 submissionRouter.delete(
   "/:id",

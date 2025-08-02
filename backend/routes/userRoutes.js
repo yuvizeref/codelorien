@@ -1,10 +1,5 @@
 import express from "express";
-import {
-  authenticate,
-  authorizeAdmin,
-  authorizeSelf,
-  authorizeSelfOrAdmin,
-} from "../middleware/authenticate.js";
+import { authenticate, authorizeAdmin } from "../middleware/authenticate.js";
 import { userAddValidations, validateUserAdd } from "../middleware/user.js";
 import {
   addUserRoute,
@@ -22,13 +17,8 @@ userRouter.post("/", userAddValidations, validateUserAdd, addUserRoute);
 
 userRouter.delete("/:userId", authenticate, authorizeAdmin, deleteUserRoute);
 
-userRouter.patch(
-  "/:userId",
-  authenticate,
-  authorizeSelfOrAdmin,
-  updateUserRoute
-);
+userRouter.patch("/:userId", authenticate, updateUserRoute);
 
-userRouter.patch("/:userId/password", authorizeSelf, updatePasswordRoute);
+userRouter.patch("/:userId/password", updatePasswordRoute);
 
 export default userRouter;

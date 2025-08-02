@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { getProblems } from "../../utils/problemUtils";
-import "../../styles/Problems.css";
 import ProblemCard from "./ProblemCard";
+import "../../styles/Problems.css";
 
 const Problems = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,12 +63,14 @@ const Problems = () => {
             ))
           )}
         </div>
-        <button
-          className="add-button"
-          onClick={() => navigate("/problems/add")}
-        >
-          Add Problem
-        </button>
+        {user?.admin && (
+          <button
+            className="add-button"
+            onClick={() => navigate("/problems/add")}
+          >
+            Add Problem
+          </button>
+        )}
       </div>
     </div>
   );

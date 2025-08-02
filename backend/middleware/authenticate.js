@@ -26,27 +26,6 @@ export const authorizeAdmin = (req, res, next) => {
   next();
 };
 
-export const authorizeSelf = (req, res, next) => {
-  const userId = req.params.userId || req.body.userId;
-  if (req.user?.id !== userId) {
-    return res
-      .status(403)
-      .json({ message: "Access denied: You can only access your own data" });
-  }
-  next();
-};
-
-export const authorizeSelfOrAdmin = (req, res, next) => {
-  const userId = req.params.id;
-  if (req.user?.admin || req.user?.id === userId) {
-    return next();
-  }
-  return res.status(403).json({
-    message:
-      "Access denied: Admins or the user themselves can access this data",
-  });
-};
-
 export const loginValidations = [
   body("emailOrUsername")
     .notEmpty()
