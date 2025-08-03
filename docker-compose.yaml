@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+      - executer
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "7000:7000"
+    env_file:
+      - ./frontend/.env
+
+  executer:
+    build:
+      context: ./executer
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mongodb
+    env_file:
+      - ./executer/.env
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27000:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
