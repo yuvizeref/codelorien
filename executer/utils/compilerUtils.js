@@ -5,7 +5,7 @@ import { runCode as runPythonCode } from "../compilers/python.js";
 const compilerMap = {
   cpp: runCPPCode,
   java: runJavaCode,
-  py: runPythonCode,
+  python: runPythonCode,
 };
 
 export const runCode = async (code, input, language) => {

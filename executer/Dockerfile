@@ -22,8 +22,15 @@ WORKDIR /app
 # Copy only the necessary files from the build stage
 COPY --from=build /app /app
 
-# Install g++ and other necessary tools during runtime
-RUN apk add --no-cache g++ make bash libstdc++
+# Install g++, make, bash, libstdc++, and Java runtime and development tools
+RUN apk add --no-cache \
+    g++ \
+    make \
+    bash \
+    libstdc++ \
+    openjdk11 \
+    python3 \
+    py3-pip
 
 # Expose the port your app runs on
 EXPOSE 9000

@@ -3,7 +3,10 @@ import "../../styles/Editor.css";
 
 const Editor = ({ code, setCode, language }) => {
   const handleEditorChange = (value) => {
-    setCode(value);
+    setCode((prevState) => ({
+      ...prevState,
+      [language]: value,
+    }));
   };
 
   return (
@@ -11,7 +14,7 @@ const Editor = ({ code, setCode, language }) => {
       <MonacoEditor
         height="400px"
         language={language}
-        value={code}
+        value={code[language]}
         onChange={handleEditorChange}
         theme="vs"
         options={{

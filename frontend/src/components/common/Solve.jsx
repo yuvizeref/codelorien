@@ -8,9 +8,11 @@ import { runCode } from "../../utils/runUtils";
 import Verdict from "./Verdict";
 import Editor from "./Editor";
 import AIModal from "./AIModal";
+import { cpp, java, python } from "../../utils/snippets";
 import "../../styles/Solve.css";
 
-const languages = ["cpp"];
+const languages = ["cpp", "java", "python"];
+const codePlaceholder = { cpp: cpp, java: java, python: python };
 
 const Solve = () => {
   const { problemId } = useParams();
@@ -19,7 +21,7 @@ const Solve = () => {
 
   const [problem, setProblem] = useState(null);
   const [error, setError] = useState(null);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(codePlaceholder);
   const [submitting, setSubmitting] = useState(false);
   const [submissionId, setSubmissionId] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
@@ -31,7 +33,11 @@ const Solve = () => {
   const handleRun = async () => {
     setSubmitting(true);
     try {
-      const result = await runCode(code, customInput, selectedLanguage);
+      const result = await runCode(
+        code[selectedLanguage],
+        customInput,
+        selectedLanguage
+      );
       setResult(result);
     } catch (err) {
       setResult(err.message);
@@ -45,7 +51,11 @@ const Solve = () => {
     setSubmissionId(null);
     setSubmitting(true);
     try {
-      const submission = await submitCode(problemId, code, selectedLanguage);
+      const submission = await submitCode(
+        problemId,
+        code[selectedLanguage],
+        selectedLanguage
+      );
       const judgeSubmitted = await judgeSubmission(submission._id);
       if (judgeSubmitted) {
         setSubmissionId(submission._id);
@@ -219,7 +229,10 @@ const Solve = () => {
 
       {isModalOpen && (
         <AIModal
-          content={{ code: code, description: problem.description }}
+          content={{
+            code: code[selectedLanguage],
+            description: problem.description,
+          }}
           onClose={() => setIsModalOpen(false)}
         />
       )}
