@@ -87,6 +87,13 @@ const Solve = () => {
     setActiveTab(tab);
   };
 
+  const setLanguageCode = (editorCode) => {
+    setCode((prevState) => ({
+      ...prevState,
+      [selectedLanguage]: editorCode,
+    }));
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "custom-input":
@@ -162,7 +169,11 @@ const Solve = () => {
           </div>
         </div>
 
-        <Editor code={code} setCode={setCode} language={selectedLanguage} />
+        <Editor
+          code={code[selectedLanguage]}
+          setCode={setLanguageCode}
+          language={selectedLanguage}
+        />
 
         {!loggedIn && (
           <p className="solve-login-message">
