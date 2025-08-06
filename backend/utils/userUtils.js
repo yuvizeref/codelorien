@@ -44,9 +44,19 @@ export const getUsers = async (showDeleted = false) => {
   return await User.find({ deleted: false }).select("-password");
 };
 
+export const getUser = async (userId) => {
+  return await User.findById(userId).select("-password");
+};
+
 export const updateUser = async (id, updateData, admin = false) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
+  }
+
+  const user = await User.findById(id);
+
+  if (user.username === "admin" && updateData.username !== "admin") {
+    throw new Error("Admin username cannot be updated");
   }
 
   let disallowedFields = ["created"];
@@ -100,6 +110,7 @@ export const createAdminUser = async () => {
 
     user.username = "admin";
     user.email = "admin@admin.com";
+    user.fullName = "Administrator";
     user.password = await hashPassword(process.env.ADMIN_PASS);
     user.admin = true;
     user.created = new Date();

@@ -56,9 +56,14 @@ const Submissions = () => {
                   key={submission._id}
                   onClick={() => setSelectedSubmission(submission)}
                 >
-                  <h2 className="submission-status">{submission.status}</h2>
-                  <p className="submission-date">
-                    {formatDate(submission.created)}
+                  <div>
+                    <h2 className="submission-status">{submission.status}</h2>
+                    <p className="submission-date">
+                      {formatDate(submission.created)}
+                    </p>
+                  </div>
+                  <p className="submission-language">
+                    <span>{submission.language}</span>
                   </p>
                 </div>
               ))

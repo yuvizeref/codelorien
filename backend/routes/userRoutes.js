@@ -4,12 +4,15 @@ import { userAddValidations, validateUserAdd } from "../middleware/user.js";
 import {
   addUserRoute,
   deleteUserRoute,
+  getUserRoute,
   getUsersRoute,
   updatePasswordRoute,
   updateUserRoute,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
+
+userRouter.get("/:userId", authenticate, getUserRoute);
 
 userRouter.get("/", authenticate, authorizeAdmin, getUsersRoute);
 
@@ -19,6 +22,6 @@ userRouter.delete("/:userId", authenticate, authorizeAdmin, deleteUserRoute);
 
 userRouter.patch("/:userId", authenticate, updateUserRoute);
 
-userRouter.patch("/:userId/password", updatePasswordRoute);
+userRouter.patch("/:userId/password", authenticate, updatePasswordRoute);
 
 export default userRouter;

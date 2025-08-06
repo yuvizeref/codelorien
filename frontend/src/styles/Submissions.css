@@ -46,6 +46,9 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05), -4px 0 10px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .submission-card:hover {
@@ -59,6 +62,7 @@
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 0.5rem;
+  margin-right: 1rem;
 }
 
 .submission-status.passed {
@@ -77,6 +81,17 @@
 }
 
 .submission-date span {
+  color: #2563eb;
+}
+
+.submission-language {
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+  text-align: right;
+}
+
+.submission-language span {
   color: #2563eb;
 }
 

@@ -11,10 +11,12 @@ import Auth from "./components/auth/Auth";
 import Problems from "./components/common/Problems";
 import Solve from "./components/common/Solve";
 import Navbar from "./components/common/Navbar";
-import "./App.css";
 import Problem from "./components/common/Problem";
 import Submissions from "./components/common/Submissions";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import User from "./components/common/User";
+import Users from "./components/common/Users";
+import "./App.css";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -31,11 +33,11 @@ const App = () => {
 
   return (
     <>
-      <Navbar></Navbar>
       <Router>
+        <Navbar></Navbar>
         <div className="app">
           <Routes>
-            <Route path="/" element={<Navigate to="/problems" />} />
+            <Route path="/" element={<Navigate to="/auth" />} />
             <Route path="/problems" element={<Problems />} />
             <Route
               path="/problems/add"
@@ -51,6 +53,8 @@ const App = () => {
               path="/auth"
               element={loggedIn ? <Navigate to="/problems" /> : <Auth />}
             />
+            <Route path="/users/:userId" element={<User />} />
+            <Route path="/users" element={<Users />} />
           </Routes>
         </div>
       </Router>
