@@ -78,7 +78,7 @@ const User = () => {
   return (
   <div className="edit-user-container">
     <div className="edit-user-form">
-      <h2 className="edit-user-title">Edit Your Details</h2>
+      <h2 className="edit-user-title">Edit User Details</h2>
 
       <form onSubmit={updateUserDetail}>
         <div className="mb-4">

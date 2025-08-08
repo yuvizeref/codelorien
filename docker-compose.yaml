@@ -2,6 +2,7 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.backend
     image: codelorien-backend
     ports:
       - "8000:8000"
@@ -16,6 +17,7 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile.frontend
     image: codelorien-frontend
     ports:
       - "7000:7000"

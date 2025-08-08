@@ -111,9 +111,63 @@
   background-color: #93c5fd;
 }
 
-@media (min-width: 1024px) {
-  .problems-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
+.search-bar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  outline: none;
+  margin-right: 1rem;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+}
+
+.difficulty-filter {
+  display: flex;
+  gap: 0.75rem;
+  margin-left: 1rem;
+}
+
+.difficulty-button {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+  white-space: nowrap;
+}
+
+.difficulty-button.selected {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.difficulty-button:hover {
+  background-color: #d1d5db;
+}
+
+.difficulty-button.selected:hover {
+  background-color: #1d4ed8;
 }

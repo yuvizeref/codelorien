@@ -61,12 +61,6 @@ const Users = () => {
             users.map((user) => <UserCard key={user._id} user={user} />)
           )}
         </div>
-
-        {user?.admin && (
-          <button className="add-button" onClick={() => navigate("/users/add")}>
-            Add User
-          </button>
-        )}
       </div>
     </div>
   );

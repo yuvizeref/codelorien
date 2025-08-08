@@ -12,6 +12,8 @@ const Problems = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDifficulties, setSelectedDifficulties] = useState([]);
 
   const fetchProblems = async () => {
     try {
@@ -28,6 +30,23 @@ const Problems = () => {
   useEffect(() => {
     fetchProblems();
   }, []);
+
+  const handleDifficultyToggle = (difficulty) => {
+    setSelectedDifficulties((prev) => {
+      if (prev.includes(difficulty)) {
+        return prev.filter((item) => item !== difficulty);
+      } else {
+        return [...prev, difficulty];
+      }
+    });
+  };
+
+  const filteredProblems = problems.filter((problem) => {
+    const nameMatch = problem.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const difficultyMatch =
+      selectedDifficulties.length === 0 || selectedDifficulties.includes(problem.difficulty);
+    return nameMatch && difficultyMatch;
+  });
 
   if (loading) {
     return (
@@ -54,15 +73,40 @@ const Problems = () => {
       <div className="problems-container">
         <h1 className="problems-title">Problem List</h1>
 
+        <div className="search-bar-container">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search problems by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+          </div>
+
+          <div className="difficulty-filter">
+            {["Easy", "Medium", "Hard"].map((difficulty) => (
+              <button
+                key={difficulty}
+                className={`difficulty-button ${selectedDifficulties.includes(difficulty) ? "selected" : ""}`}
+                onClick={() => handleDifficultyToggle(difficulty)}
+              >
+                {difficulty}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="problems-list">
-          {problems.length === 0 ? (
-            <p className="no-problems">No problems available.</p>
+          {filteredProblems.length === 0 ? (
+            <p className="no-problems">No problems available matching the search.</p>
           ) : (
-            problems.map((problem) => (
+            filteredProblems.map((problem) => (
               <ProblemCard key={problem._id} problem={problem} />
             ))
           )}
         </div>
+
         {user?.admin && (
           <button
             className="add-button"
