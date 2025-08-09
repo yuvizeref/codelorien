@@ -16,7 +16,6 @@
   width: 100%;
   margin: 0 auto;
   padding: 0 1.5rem;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -95,4 +94,21 @@
 
 .dropdown-item:hover {
   background-color: #e0e7ff;
+}
+
+.auth-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.auth-link {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+  color: #dbeafe;
 }

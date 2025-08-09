@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import User from "./components/common/User";
 import Users from "./components/common/Users";
 import "./App.css";
+import Footer from "./components/common/Footer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/users" element={<Users />} />
           </Routes>
         </div>
+        <Footer></Footer>
       </Router>
     </>
   );

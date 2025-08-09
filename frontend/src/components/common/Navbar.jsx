@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../utils/authUtils";
 import { FiUser } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../../styles/Navbar.css";
 
 const Navbar = () => {
@@ -49,30 +49,39 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div
-          className="user-icon-container"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          ref={dropdownRef}
-        >
-          <FiUser className="user-icon" />
+        <div className="navbar-right">
+          {user ? (
+            <div
+              className="user-icon-container"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              ref={dropdownRef}
+            >
+              <FiUser className="user-icon" />
 
-          {dropdownOpen && (
-            <div className="dropdown-menu">
-              {user && user.username && (
-                <button className="dropdown-item" onClick={handleUserClick}>
-                  {user.username}
-                </button>
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  {user.username && (
+                    <button className="dropdown-item" onClick={handleUserClick}>
+                      {user.username}
+                    </button>
+                  )}
+                  <button
+                    className="dropdown-item"
+                    onClick={() => {
+                      logout(dispatch);
+                      window.location.reload();
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
-
-              <button
-                className="dropdown-item"
-                onClick={() => {
-                  logout(dispatch);
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </button>
+            </div>
+          ) : (
+            <div className="auth-links">
+              <Link to="/auth" className="auth-link">
+                Login or Register
+              </Link>
             </div>
           )}
         </div>
