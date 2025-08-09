@@ -16,8 +16,8 @@ import Submissions from "./components/common/Submissions";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import User from "./components/common/User";
 import Users from "./components/common/Users";
+import LandingPage from "./components/common/LandingPage";
 import "./App.css";
-import Footer from "./components/common/Footer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const App = () => {
         <Navbar></Navbar>
         <div className="app">
           <Routes>
-            <Route path="/" element={<Navigate to="/auth" />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/problems" element={<Problems />} />
             <Route
               path="/problems/add"
@@ -58,7 +58,6 @@ const App = () => {
             <Route path="/users" element={<Users />} />
           </Routes>
         </div>
-        <Footer></Footer>
       </Router>
     </>
   );

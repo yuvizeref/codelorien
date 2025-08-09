@@ -33,7 +33,9 @@
   font-size: 1.5rem;
   cursor: pointer;
   flex-shrink: 0;
+  text-decoration: none;
 }
+
 
 .navbar-links {
   list-style: none;

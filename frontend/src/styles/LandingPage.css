@@ -1,0 +1,58 @@
+.landing-page-container {
+  font-family: Arial, sans-serif;
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: #f0f4f8;
+}
+
+.landing-page-header {
+  margin-bottom: 2rem;
+}
+
+.landing-page-header h1 {
+  font-size: 3rem;
+  color: #2563eb;
+}
+
+.landing-page-header p {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  color: #6b7280;
+}
+
+.landing-buttons {
+  margin-top: 2rem;
+}
+
+.landing-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin: 0 10px;
+  font-size: 1.1rem;
+}
+
+.landing-button:hover {
+  background-color: #93c5fd;
+}
+
+.about-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.landing-footer {
+  margin-top: 4rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}

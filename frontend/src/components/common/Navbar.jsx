@@ -35,7 +35,9 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-left">
-          <div className="navbar-logo">Codelorien</div>
+          <Link to="/" className="navbar-logo">
+            Codelorien
+          </Link>
 
           <ul className="navbar-links">
             <li>
