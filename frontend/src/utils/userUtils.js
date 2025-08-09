@@ -25,12 +25,24 @@ export const getUsers = async () => {
   }
 };
 
-export const updateUser = async (userId, username, email, fullName) => {
-  await axiosInstance.patch(`/users/${userId}`, {
-    username: username,
-    email: email,
-    fullName: fullName,
-  });
+export const updateUser = async (
+  userId,
+  username,
+  email,
+  fullName,
+  password
+) => {
+  const body = {
+    username,
+    email,
+    fullName,
+  };
+
+  if (password) {
+    body.password = password;
+  }
+
+  await axiosInstance.patch(`/users/${userId}`, body);
 };
 
 export const deleteUser = async (userId) => {
@@ -39,4 +51,11 @@ export const deleteUser = async (userId) => {
   if (response.status === 200) {
     return response.data.user;
   }
+};
+
+export const updatePassword = async (userId, oldPassword, newPassword) => {
+  await axiosInstance.patch(`/users/${userId}/password`, {
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+  });
 };

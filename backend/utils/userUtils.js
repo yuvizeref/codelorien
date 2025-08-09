@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import { hashPassword } from "./commonUtils.js";
+import { deleteSubmissionsByUserId } from "./submissionUtils.js";
 
 export const saveUser = async ({ username, email, password, fullName }) => {
   const existing = await User.findOne({ $or: [{ email }, { username }] });
@@ -23,12 +24,13 @@ export const saveUser = async ({ username, email, password, fullName }) => {
   return result;
 };
 
-export const deleteUser = async (id, purge = false) => {
+export const deleteUser = async (id, purge = "true") => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid user ID");
   }
 
-  if (purge) {
+  if (purge === "true") {
+    deleteSubmissionsByUserId(id);
     return await User.findByIdAndDelete(id);
   } else {
     return await User.findByIdAndUpdate(
@@ -57,6 +59,10 @@ export const updateUser = async (id, updateData, admin = false) => {
 
   if (user.username === "admin" && updateData.username !== "admin") {
     throw new Error("Admin username cannot be updated");
+  }
+
+  if (updateData.password) {
+    updateData.password = await hashPassword(updateData.password);
   }
 
   let disallowedFields = ["created"];
@@ -109,7 +115,7 @@ export const createAdminUser = async () => {
     const user = new User();
 
     user.username = "admin";
-    user.email = "admin@admin.com";
+    user.email = "admin@codelorien.com";
     user.fullName = "Administrator";
     user.password = await hashPassword(process.env.ADMIN_PASS);
     user.admin = true;

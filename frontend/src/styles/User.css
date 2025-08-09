@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #f8f9fa;
+  padding: 1rem;
 }
 
 .edit-user-form {
@@ -79,16 +80,38 @@
   margin: 0;
 }
 
+.success-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #48bb78;
+  color: white;
+  border-radius: 8px;
+}
+
+.success-message p {
+  margin: 0;
+}
+
+.section-divider {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 .mb-4 {
   margin-bottom: 1.5rem;
 }
 
 .mb-6 {
   margin-bottom: 1.5rem;
-}
-
-.edit-user-container {
-  padding: 1rem;
 }
 
 @media (max-width: 480px) {
@@ -107,5 +130,9 @@
 
   .submit-btn {
     padding: 0.8rem;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
   }
 }

@@ -44,10 +44,10 @@ export const addUserRoute = async (req, res) => {
 
 export const deleteUserRoute = async (req, res) => {
   const { userId } = req.params;
-  const { purge } = req.query;
+  const purge = req.query.purge ? req.query.purge : "true";
 
   try {
-    const deleted = await deleteUser(userId, purge === "true");
+    const deleted = await deleteUser(userId, purge);
 
     if (!deleted) {
       return res.status(404).json({ error: "User not found" });

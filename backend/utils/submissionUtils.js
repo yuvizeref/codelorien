@@ -119,3 +119,22 @@ export const deleteSubmissionsByProblemId = async (problemId) => {
     throw err;
   }
 };
+
+export const deleteSubmissionsByUserId = async (userId) => {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new Error("Invalid user ID");
+  }
+  try {
+    const submissions = await Submission.find({ userId });
+
+    if (submissions.length > 0) {
+      submissions.forEach((submission) => {
+        deleteFileFromStorage(submission.code);
+      });
+
+      return await Submission.deleteMany({ userId });
+    }
+  } catch (err) {
+    throw err;
+  }
+};
