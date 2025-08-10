@@ -46,6 +46,6 @@ export const deleteFileFromStorage = async (fileKey) => {
   try {
     await fs.promises.unlink(filePath);
   } catch (error) {
-    throw new Error("File not found or failed to delete");
+    console.error("File not found or failed to delete");
   }
 };
