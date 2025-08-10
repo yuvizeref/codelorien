@@ -77,3 +77,11 @@ export const deleteProblem = async (id, user, purge = "true") => {
     throw new Error("Error deleting problem.");
   }
 };
+
+export const deleteAllProblems = async () => {
+  try {
+    await Problem.deleteMany({});
+  } catch (err) {
+    console.error(err);
+  }
+};

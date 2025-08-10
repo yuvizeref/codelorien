@@ -12,6 +12,7 @@ import judgeRouter from "./routes/judgeRoutes.js";
 import cors from "./middleware/corsConfig.js";
 import runRouter from "./routes/runRoutes.js";
 import aiRouter from "./routes/aiRoutes.js";
+import { cleanUp, createProblems } from "./utils/dataUtils.js";
 
 dotenv.config();
 
@@ -33,6 +34,10 @@ app.use("/api", docsRouter);
 await dbConnection();
 
 await createAdminUser();
+
+await cleanUp();
+
+await createProblems();
 
 app.listen(process.env.SERVER_PORT, "0.0.0.0", () => {
   console.log(`✅ Server is running on port : ${process.env.SERVER_PORT}`);
