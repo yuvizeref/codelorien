@@ -16,6 +16,9 @@ export const runCode = async (code, input) => {
     const output = await run(code, input, stagingDir);
     return output;
   } catch (err) {
+    if (!err.stderr) {
+      err.stderr = err.message;
+    }
     throw err;
   } finally {
     if (stagingDir) {
@@ -27,9 +30,14 @@ export const runCode = async (code, input) => {
 export const run = async (code, input, stagingDir) => {
   try {
     const codeFilePath = createFile(code, stagingDir, "Main.java");
-    const compiledFilePath = path.join(stagingDir, "Main");
 
-    await execPromise(`javac ${codeFilePath}`);
+    try {
+      await execPromise(`javac ${codeFilePath}`);
+    } catch (compileErr) {
+      const error = new Error("Compilation failed");
+      error.stderr = compileErr.stderr || compileErr.message;
+      throw error;
+    }
 
     const runProcess = spawn("java", ["-cp", stagingDir, "Main"]);
 
@@ -38,27 +46,39 @@ export const run = async (code, input, stagingDir) => {
       runProcess.stdin.end();
     }
 
-    let output = "";
+    let stdout = "";
+    let stderr = "";
 
     runProcess.stdout.on("data", (data) => {
-      output += data.toString();
+      stdout += data.toString();
     });
 
     runProcess.stderr.on("data", (data) => {
-      throw new Error(`Runtime error: ${data.toString()}`);
+      stderr += data.toString();
     });
 
-    const exitCode = await new Promise((resolve, reject) => {
+    const processPromise = new Promise((resolve, reject) => {
       runProcess.on("close", (code) => {
         if (code === 0) {
-          resolve(output);
+          resolve(stdout);
         } else {
-          reject(`Process exited with code ${code}`);
+          const error = new Error("Runtime error");
+          error.stderr = stderr || `Process exited with code ${code}`;
+          reject(error);
         }
       });
     });
 
-    return output;
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => {
+        runProcess.kill();
+        const error = new Error("Execution timed out");
+        error.stderr = "Time Limit Exceeded.";
+        reject(error);
+      }, 2000);
+    });
+
+    return await Promise.race([processPromise, timeoutPromise]);
   } catch (error) {
     throw error;
   }

@@ -16,6 +16,9 @@ export const runCode = async (code, input) => {
     const output = await run(code, input, stagingDir);
     return output;
   } catch (err) {
+    if (!err.stderr) {
+      err.stderr = err.message;
+    }
     throw err;
   } finally {
     if (stagingDir) {
@@ -29,7 +32,13 @@ export const run = async (code, input, stagingDir) => {
     const codeFilePath = createFile(code, stagingDir, "run.cpp");
     const compiledFilePath = path.join(stagingDir, "compiled.out");
 
-    await execPromise(`g++ ${codeFilePath} -o ${compiledFilePath}`);
+    try {
+      await execPromise(`g++ ${codeFilePath} -o ${compiledFilePath}`);
+    } catch (compileErr) {
+      const error = new Error("Compilation failed");
+      error.stderr = compileErr.stderr || compileErr.message;
+      throw error;
+    }
 
     const compiledProcess = spawn(compiledFilePath);
 
@@ -38,27 +47,39 @@ export const run = async (code, input, stagingDir) => {
       compiledProcess.stdin.end();
     }
 
-    let output = "";
+    let stdout = "";
+    let stderr = "";
 
     compiledProcess.stdout.on("data", (data) => {
-      output += data.toString();
+      stdout += data.toString();
     });
 
     compiledProcess.stderr.on("data", (data) => {
-      throw new Error(`Runtime error: ${data.toString()}`);
+      stderr += data.toString();
     });
 
-    const exitCode = await new Promise((resolve, reject) => {
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => {
+        compiledProcess.kill();
+        const timeoutError = new Error("Execution timed out");
+        timeoutError.stderr = "Time Limit Exceeded.";
+        reject(timeoutError);
+      }, 2000);
+    });
+
+    const processPromise = new Promise((resolve, reject) => {
       compiledProcess.on("close", (code) => {
         if (code === 0) {
-          resolve(output);
+          resolve(stdout);
         } else {
-          reject(`Process exited with code ${code}`);
+          const runtimeError = new Error("Runtime error");
+          runtimeError.stderr = stderr || `Process exited with code ${code}`;
+          reject(runtimeError);
         }
       });
     });
 
-    return output;
+    return await Promise.race([processPromise, timeoutPromise]);
   } catch (error) {
     throw error;
   }

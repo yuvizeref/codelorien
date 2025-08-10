@@ -8,7 +8,7 @@ export const runSubmission = async (submissionId) => {
 
     evaluateSubmission(submission);
 
-    await updateSubmission(submissionId, { status: "running" });
+    await updateSubmission(submissionId, { status: "Running" });
   } catch (err) {
     throw err;
   }
@@ -23,7 +23,7 @@ export const evaluateSubmission = async (submission) => {
     })
     .catch(async (err) => {
       await updateSubmission(submission.id, {
-        status: "failed",
+        status: "Failed",
         error: err.message,
         evaluated: true,
       });
@@ -44,7 +44,7 @@ const judgeResult = async (submissionId, output) => {
     await updateSubmission(submissionId, {
       passedTests: passed,
       failedTests: failed,
-      status: failed.length > 0 ? "failed" : "accepted",
+      status: failed.length > 0 ? "Failed" : "Accepted",
       error: "",
       evaluated: true,
     });
